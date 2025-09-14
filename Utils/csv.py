@@ -3,16 +3,29 @@ class File:
         self.path = path
 
     def read(self):
-        with open(self.path, 'r') as file:
-            return file.readlines()
+        try:
+            with open(self.path, 'r') as file:
+                return file.readlines()
+        except Exception as e:
+            print(f"Error reading {self.path}: {e}")
+            return []
 
     def write(self, data):
-        with open(self.path, 'w') as file:
-            file.writelines(data)
+        try:
+            with open(self.path, 'w') as file:
+                file.writelines(data)
+        except Exception as e:
+            print(f"Error writing {self.path}: {e}")
 
     def append(self, data):
-        with open(self.path, 'a') as file:
-            file.writelines(data)
+        try:
+            with open(self.path, 'a') as file:
+                file.writelines(data)
+        except Exception as e:
+            print(f"Error appending to {self.path}: {e}")
 
     def clear(self):
-        open(self.path, 'w').close()
+        try:
+            open(self.path, 'w').close()
+        except Exception as e:
+            print(f"Error clearing {self.path}: {e}")

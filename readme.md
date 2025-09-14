@@ -31,14 +31,3 @@ Aquí encontrarás soluciones implementadas principalmente en **Python**, aunque
 - **Otras herramientas**: Pequeños programas gráficos para visualización y exploración  
 
 ---
-
-## Estructura del proyecto
-```
-metodos-numericos/
-│
-├─ python/           # Scripts y módulos en Python
-├─ octave/           # Ejemplos y ejercicios en Octave
-├─ visualizaciones/  # Programas con interfaces o gráficos
-├─ README.md         # Este archivo
-└─ LICENSE           # Licencia del repositorio
-```

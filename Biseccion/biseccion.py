@@ -1,3 +1,8 @@
+'''
+@deprecated
+
+Este Script ha sido deprecado, se recomienda usar el Script main.py en esta misma carpeta.
+'''
 from Utils import utils
 from Utils import csv
 
@@ -5,7 +10,7 @@ if(__name__ == "__main__"):
     print("Metodo de biseccion")
 
     # Variables
-    path : str = "./out/biseccion.csv" # File out path
+    path : str = "../out/biseccion.csv" # File out path
     file = csv.File(path)
 
     hidden : bool = False
@@ -70,3 +75,5 @@ if(__name__ == "__main__"):
     print("\tProcedimiento finalizado\n")
     print("Nota: Puede consultar los resultados en el archivo ./out/biseccion.csv")
     utils.lines()
+
+
