@@ -1,4 +1,47 @@
-from Utils import function as func
+from math import *
+
+class Function:
+    ''' Clase para representar una función matemática '''
+    def __init__(self, expresion: str):
+        self.expresion = expresion
+        self.real_roots : list[float] = []
+
+    def set_expression(self, expresion: str):
+        self.expresion = expresion
+
+    def evaluate(self, x: float) -> float:
+        ''' Evaluates the polynomial function at a given x value '''
+        return eval(self.expresion.replace('x', f'({x})'))
+    
+    def get_coefficients(self) -> list[float]:
+        ''' Returns the coefficients of the polynomial function'''
+        terms = self.expresion.replace('-', '+-').split('+')
+        coefficients : list[float] = []
+
+        for term in terms:
+            term = term.strip()
+            if(term == ''):
+                continue
+
+            val = eval(term.replace('x', ('(1)')))
+            if val != 0:
+                coefficients.append(val)
+
+        return coefficients
+    
+    def append_real_root(self, root: float):
+        self.real_roots.append(root)
+
+    def get_real_roots(self) -> list[float]:
+        return self.real_roots
+    
+    def _filter_expression(self):
+        pass
+    
+    def __str__(self):
+        return self.expresion
+    
+######################################
 
 def get_multiples(number) -> list[int]:
     ''' Returns the multiples of a number '''
@@ -28,7 +71,7 @@ def get_rational_roots(p : float, q : float) -> list[float]:
 
     return roots    
 
-def count_real_solutions(function : func.Function) -> int:
+def count_real_solutions(function : Function) -> int:
     ''' Uses Descartes' Rule of Signs to count the number of possible real solutions of a polynomial function '''
     coefficients : list[float] = function.get_coefficients()
     changes : int = 0
@@ -39,7 +82,7 @@ def count_real_solutions(function : func.Function) -> int:
 
     return changes
 
-def get_intervals(function : func.Function) -> list[tuple[float, float]]:
+def get_intervals(function : Function) -> list[tuple[float, float]]:
     ''' Returns a list of intervals [a, b] where f(a) and f(b) have opposite signs '''
     intervals : list[tuple[float, float]] = []
 

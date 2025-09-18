@@ -1,6 +1,9 @@
+
 # Ejecucion
-Las dependencias empleadas por el proyecto si bien son del mismo proyecto, estas se encuentran en la carpeta raiz del proyecto y por esto el Script se debe arrancar como un modulo, de la siguiente forma:
+La ejecucion ahora es normal ya que todo esta agrupado en un mismo directorio, para arrancar el programa solo debes ingresar el siguiente comando:
 
 ``` bash
-python -m Biseccion.main
+python main.py
 ```
+
+> Nota: Recomendable crear un entorno virtual para manejar las librerias de la interfaz grafica la cual es **customtkinter**
