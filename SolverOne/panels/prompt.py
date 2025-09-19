@@ -1,0 +1,165 @@
+'''
+This module contains the PromptPanel class, which is a custom Tkinter frame
+for user input of mathematical functions. It includes an input area for the
+function expression and a button to submit the input.
+
+Design in Figma: https://www.figma.com/design/pDC9BuB5fXu5lWfgEwzTBh/BiseccionGrapInterface?node-id=0-1&t=aKpFX2sonbDXfVj2-0
+'''
+
+# Imports
+import customtkinter as ctk
+from tkinter import messagebox
+from panels import const
+
+import os
+from PIL import Image
+
+from logic.biseccion.function import Function, FunctionMediator, FunctionObserver
+
+# Classes
+class PromptInputArea(ctk.CTkFrame):
+    ''' A frame containing an input field for the function expression '''
+    def __init__(self, root, **kwargs):
+        ''' Constructor '''
+        super().__init__(root, **kwargs)
+        self.root = root
+        self._add_widgets()
+
+        # Other attributes here if needed
+
+    def _add_widgets(self):
+        ''' Adds and configures the widgets in the input area '''
+        self._add_title()
+
+        # this is the input field for the function expression
+        # the style is very smilar to the style of ChatGPT input field
+        self.input_field = ctk.CTkEntry(self, 
+                                        placeholder_text="f(x) = ", 
+                                        width=400,
+                                        height=40, 
+                                        font=ctk.CTkFont(size=const.SUBTITLE_SIZE, family=const.DEFAULT_FONT_FAMILY),
+                                        border_width=3, 
+                                        corner_radius=8
+                                        )
+        self.input_field.pack(pady=(0, 20), padx=20)
+        self.input_field.pack_propagate(False)
+
+    # Widgets representation methods
+    def _add_title(self):
+        # adding an icon to the title
+        img_path = os.path.join(os.path.dirname(__file__), "..", "sources", "img", "icon.ico")
+        img_path = os.path.abspath(img_path)
+        icon_img = ctk.CTkImage(light_image=Image.open(img_path), size=(40, 40))
+
+        # title label
+        self.label_title = ctk.CTkLabel(self, 
+                                        text="Problema", 
+                                        font=ctk.CTkFont(size=const.TITLE_SIZE, weight=const.BOLD, family=const.DEFAULT_FONT_FAMILY),
+                                        image=icon_img, 
+                                        compound="left",
+                                        )
+        self.label_title.pack(pady=(20, 10))
+
+class PromptPanel(ctk.CTkFrame, FunctionObserver):
+    ''' 
+    A custom Tkinter frame for user input of mathematical functions.
+    This method implements the Mediator pattern to update the input field
+    and other components when the function changes.
+    '''
+    def __init__(self, root, mediator: FunctionMediator, **kwargs):
+        super().__init__(root, **kwargs)
+        self.root = root
+        self.mediator: FunctionMediator = mediator
+        self.mediator.register(self)
+
+        self._add_widgets()
+
+    # @Override like in Java :)
+    # If you can't understand this method, please read about the Mediator pattern
+    def update(self, function: Function):
+        self.input_field.delete(0, ctk.END)
+        self.input_field.insert(0, function.expression)
+
+    # Widgets representation methods
+    def _config_grid(self):
+        ''' 
+        Configures the grid layout of the panel 
+        
+        Example layout:
+        +---+---+---+---+---+
+        | B |   |   |   |   |
+        +---+---+---+---+---+
+        |   |   |   |   |   |
+        +---+---+---+---+---+
+        |   |   | I |   |   |
+        +---+---+---+---+---+
+        |   |   |   |   |   |
+        +---+---+---+---+---+
+        |   |   |   |   | H |
+        +---+---+---+---+---+
+
+        is a grid with 5 rows and 5 columns
+        '''
+        # rows
+        self.grid_rowconfigure((0), weight=1)        # button here
+        self.grid_rowconfigure((1), weight=3)        # space here
+        self.grid_rowconfigure((2), weight=4)        # main area here
+        self.grid_rowconfigure((3), weight=3)        # space here
+        self.grid_rowconfigure((4), weight=1)        # button here
+
+        # columns
+        self.grid_columnconfigure((0, 1, 3, 4), weight=1)
+        self.grid_columnconfigure((2), weight=2)
+
+    def _add_widgets(self):
+        ''' Adds and configures the widgets in the panel '''
+        self._config_grid()
+
+        # adding the input area ( I hate this, It was difficult )
+        self.prompt_input_area = PromptInputArea(self)
+        self.prompt_input_area.configure(width=600, height=400, fg_color="transparent")
+        self.prompt_input_area.grid(row=2, column=2, sticky="nsew")
+        self.prompt_input_area.grid_propagate(False)
+        self.prompt_input_area.update_idletasks()
+        self.prompt_input_area.grid(row=2, column=2)
+
+        # adding the buttons
+        self._add_menu_btn()
+        self._add_help_btn()
+
+        # If you need add more widgets, add them here
+        # . . .
+
+    def _add_menu_btn(self):
+        ''' Adds the menu button to the panel '''
+        # adding an icon to the button
+        img_path = os.path.join(os.path.dirname(__file__), "..", "sources", "img", "side_nav_40p.png")
+        img_path = os.path.abspath(img_path)
+        icon_img = ctk.CTkImage(light_image=Image.open(img_path), size=(40, 40))
+
+        self.menu_btn = ctk.CTkButton(self, 
+                                       text="",
+                                       command=lambda: messagebox.showinfo("Info", "Menu button clicked!"),
+                                       width=50,
+                                       height=50,
+                                       image=icon_img,
+                                       fg_color="transparent",
+                                       )
+        self.menu_btn.grid(row=0, column=0, padx=10, pady=10, sticky="nw")
+
+    def _add_help_btn(self):
+        ''' Adds the help button to the panel '''
+        # adding an icon to the button
+        img_path = os.path.join(os.path.dirname(__file__), "..", "sources", "img", "help_50p.png")
+        img_path = os.path.abspath(img_path)
+        icon_img = ctk.CTkImage(light_image=Image.open(img_path), size=(40, 40))
+
+        self.help_btn = ctk.CTkButton(self, 
+                                       text="",
+                                       command=lambda: messagebox.showinfo("Info", "Help button clicked!"),
+                                       width=50,
+                                       height=50,
+                                       image=icon_img,
+                                       fg_color="transparent",
+                                       )
+        self.help_btn.grid(row=4, column=6, padx=10, pady=10, sticky="se")

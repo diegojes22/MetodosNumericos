@@ -31,3 +31,40 @@ Aquí encontrarás soluciones implementadas principalmente en **Python**, aunque
 - **Otras herramientas**: Pequeños programas gráficos para visualización y exploración  
 
 ---
+# Novedades del commit
+- Se ha implemenbtado el patron de diseño **Mediador** para que todos los componentes de la interfaz puedan trabajar con una sola referencia, organizando y mejorando el codigo a futuro.
+- Se ha cambiado la estructura del repositorio.
+- EL uso de **customtkinter** es oficial.
+- Se ha mejorado el concepto de la UI la cual esta disponible en **Figma**
+- Para que el proyecto se pueda ejecutar se necesita un entorno virtual.
+
+> Notas: 
+> - Este readme sera modificado en los proximos commits
+
+----
+# Sobre el entorno vitual
+Es necesario crear un entorno virtual de la siguiente forma:
+``` sh
+python -m venv <nombre-del-entorno>
+```
+por ejemplo:
+``` sh
+python -m venv env
+```
+
+Lo siguiente es activar en entorno virtual de la siguiente forma:
+* UNIX:
+  ``` sh 
+  # posiblemente debas de dar permisos de ejecucion con +x
+  # o en caso de no ejecutarse deberas revisar que shell estas usando
+  source env/bin/activate
+  ```
+* Windows:
+  ``` sh 
+  env\Scripts\activate
+  ```
+
+Una vez este activado el entorno virtual, deberas instalar las siguientes dependencias:
+``` sh 
+pip install pillow customtkinter tkinter
+```
