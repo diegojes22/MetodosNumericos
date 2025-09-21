@@ -44,6 +44,8 @@ class PromptInputArea(ctk.CTkFrame):
         self.input_field.pack(pady=(0, 20), padx=20)
         self.input_field.pack_propagate(False)
 
+        self._add_action_btns()
+
     # Widgets representation methods
     def _add_title(self):
         # adding an icon to the title
@@ -59,6 +61,49 @@ class PromptInputArea(ctk.CTkFrame):
                                         compound="left",
                                         )
         self.label_title.pack(pady=(20, 10))
+
+    def _add_action_btns(self):
+        ''' Adds the resolve button to the input area '''
+        # Icons for the buttons
+        img_path = os.path.join(os.path.dirname(__file__), "..", "sources", "img", "chart_24p.png")
+        img_path = os.path.abspath(img_path)
+        chart_icon = ctk.CTkImage(light_image=Image.open(img_path), size=(24, 24))
+
+        img_path = os.path.join(os.path.dirname(__file__), "..", "sources", "img", "calculate_24p.png")
+        img_path = os.path.abspath(img_path)
+        calculate_icon = ctk.CTkImage(light_image=Image.open(img_path), size=(24, 24))
+
+        # area for the buttons
+        self.btn_area = ctk.CTkFrame(self, 
+                                     fg_color="transparent", 
+                                     bg_color="transparent",
+                                     width=400,
+                                    )
+        self.btn_area.pack(pady=(0, 10))
+
+        # button for graphical representation of the function
+        self.graph_func_btn = ctk.CTkButton(self.btn_area, 
+                                     text="Graficar",
+                                     command=lambda: messagebox.showinfo("Info", "Test button clicked!"),
+                                     width=150,
+                                     height=40,
+                                     font=ctk.CTkFont(size=const.SUBTITLE_SIZE, family=const.DEFAULT_FONT_FAMILY),
+                                     image=chart_icon,
+                                     compound="left"
+                                    )
+        self.graph_func_btn.pack(side="right", padx=10)
+
+        self.resolve_btn = ctk.CTkButton(self.btn_area, 
+                                         text="Resolver",
+                                         command=lambda: messagebox.showinfo("Info", "Resolve button clicked!"),
+                                         width=150,
+                                         height=40,
+                                         font=ctk.CTkFont(size=const.SUBTITLE_SIZE, family=const.DEFAULT_FONT_FAMILY),
+                                         image=calculate_icon,
+                                         compound="left"
+                                        )
+        self.resolve_btn.pack(side="left", padx=10)
+
 
 class PromptPanel(ctk.CTkFrame, FunctionObserver):
     ''' 
