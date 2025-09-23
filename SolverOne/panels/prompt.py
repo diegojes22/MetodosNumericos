@@ -10,6 +10,8 @@ Design in Figma: https://www.figma.com/design/pDC9BuB5fXu5lWfgEwzTBh/BiseccionGr
 import customtkinter as ctk
 from tkinter import messagebox
 from panels import const
+from panels.graph import GraphDialog
+from panels.basic import add_image_to_button, center_window
 
 import os
 from PIL import Image
@@ -19,10 +21,11 @@ from logic.biseccion.function import Function, FunctionMediator, FunctionObserve
 # Classes
 class PromptInputArea(ctk.CTkFrame):
     ''' A frame containing an input field for the function expression '''
-    def __init__(self, root, **kwargs):
+    def __init__(self, root, function_mediator: FunctionMediator, **kwargs):
         ''' Constructor '''
         super().__init__(root, **kwargs)
         self.root = root
+        self.function_mediator = function_mediator
         self._add_widgets()
 
         # Other attributes here if needed
@@ -43,6 +46,7 @@ class PromptInputArea(ctk.CTkFrame):
                                         )
         self.input_field.pack(pady=(0, 20), padx=20)
         self.input_field.pack_propagate(False)
+        self.input_field.bind("<KeyRelease>", lambda e: self.on_input_change())
 
         self._add_action_btns()
 
@@ -84,7 +88,7 @@ class PromptInputArea(ctk.CTkFrame):
         # button for graphical representation of the function
         self.graph_func_btn = ctk.CTkButton(self.btn_area, 
                                      text="Graficar",
-                                     command=lambda: messagebox.showinfo("Info", "Test button clicked!"),
+                                     command=self.on_graph,
                                      width=150,
                                      height=40,
                                      font=ctk.CTkFont(size=const.SUBTITLE_SIZE, family=const.DEFAULT_FONT_FAMILY),
@@ -95,7 +99,7 @@ class PromptInputArea(ctk.CTkFrame):
 
         self.resolve_btn = ctk.CTkButton(self.btn_area, 
                                          text="Resolver",
-                                         command=lambda: messagebox.showinfo("Info", "Resolve button clicked!"),
+                                         command=self.on_resolve,
                                          width=150,
                                          height=40,
                                          font=ctk.CTkFont(size=const.SUBTITLE_SIZE, family=const.DEFAULT_FONT_FAMILY),
@@ -103,6 +107,27 @@ class PromptInputArea(ctk.CTkFrame):
                                          compound="left"
                                         )
         self.resolve_btn.pack(side="left", padx=10)
+
+
+    ### events ###
+    def on_graph(self):
+        graph : GraphDialog = GraphDialog(self.root, self.function_mediator)
+        graph.show()
+        #graph.grab_set()
+        #self.root.wait_window(graph)
+
+    def on_resolve(self):
+        messagebox.showinfo("Info", "Resolve button clicked!")
+
+    def on_input_change(self):
+        ''' Event handler for input field changes '''
+        new_expression = self.input_field.get()
+
+        try:
+            new_function = Function(new_expression)
+            self.function_mediator.set_function(new_function)
+        except Exception as e:
+            print("Invalid function expression")
 
 
 class PromptPanel(ctk.CTkFrame, FunctionObserver):
@@ -119,11 +144,9 @@ class PromptPanel(ctk.CTkFrame, FunctionObserver):
 
         self._add_widgets()
 
-    # @Override like in Java :)
     # If you can't understand this method, please read about the Mediator pattern
     def update(self, function: Function):
-        self.input_field.delete(0, ctk.END)
-        self.input_field.insert(0, function.expression)
+        pass
 
     # Widgets representation methods
     def _config_grid(self):
@@ -161,7 +184,7 @@ class PromptPanel(ctk.CTkFrame, FunctionObserver):
         self._config_grid()
 
         # adding the input area ( I hate this, It was difficult )
-        self.prompt_input_area = PromptInputArea(self)
+        self.prompt_input_area = PromptInputArea(self, self.mediator)
         self.prompt_input_area.configure(width=600, height=400, fg_color="transparent")
         self.prompt_input_area.grid(row=2, column=2, sticky="nsew")
         self.prompt_input_area.grid_propagate(False)
@@ -208,3 +231,6 @@ class PromptPanel(ctk.CTkFrame, FunctionObserver):
                                        fg_color="transparent",
                                        )
         self.help_btn.grid(row=4, column=6, padx=10, pady=10, sticky="se")
+
+    ### events ###
+    
