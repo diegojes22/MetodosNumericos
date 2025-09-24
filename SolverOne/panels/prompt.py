@@ -13,6 +13,7 @@ from panels import const
 from panels.graph import GraphDialog
 from panels.basic import add_image_to_button, center_window
 from panels.results import ResultsPanel
+from panels.modelSelection import ModelSelectionPanel, ModelMediator, ModelObserver
 
 import os
 from PIL import Image
@@ -22,10 +23,11 @@ from logic.biseccion.function import Function, FunctionMediator, FunctionObserve
 # Classes
 class PromptInputArea(ctk.CTkFrame):
     ''' A frame containing an input field for the function expression '''
-    def __init__(self, root, function_mediator: FunctionMediator, **kwargs):
+    def __init__(self, root, function_mediator: FunctionMediator, model_mediator : ModelMediator, **kwargs):
         ''' Constructor '''
         super().__init__(root, **kwargs)
         self.root = root
+        self.model_mediator = model_mediator
         self.function_mediator = function_mediator
         self._add_widgets()
 
@@ -118,7 +120,7 @@ class PromptInputArea(ctk.CTkFrame):
         #self.root.wait_window(graph)
 
     def on_resolve(self):
-        results_panel = ResultsPanel(self.root, self.function_mediator)
+        results_panel = ResultsPanel(self.root, self.function_mediator, self.model_mediator)
         results_panel.solver()
         results_panel.show()
 
@@ -143,8 +145,10 @@ class PromptPanel(ctk.CTkFrame, FunctionObserver):
     def __init__(self, root, mediator: FunctionMediator, **kwargs):
         super().__init__(root, **kwargs)
         self.root = root
-        self.mediator: FunctionMediator = mediator
-        self.mediator.register(self)
+        self.function_mediator: FunctionMediator = mediator
+        self.model_mediator : ModelMediator = ModelMediator()
+
+        self.function_mediator.register(self)
 
         self._add_widgets()
 
@@ -188,7 +192,7 @@ class PromptPanel(ctk.CTkFrame, FunctionObserver):
         self._config_grid()
 
         # adding the input area ( I hate this, It was difficult )
-        self.prompt_input_area = PromptInputArea(self, self.mediator)
+        self.prompt_input_area = PromptInputArea(self, function_mediator=self.function_mediator, model_mediator=self.model_mediator)
         self.prompt_input_area.configure(width=600, height=400, fg_color="transparent")
         self.prompt_input_area.grid(row=2, column=2, sticky="nsew")
         self.prompt_input_area.grid_propagate(False)
@@ -211,7 +215,7 @@ class PromptPanel(ctk.CTkFrame, FunctionObserver):
 
         self.menu_btn = ctk.CTkButton(self, 
                                        text="",
-                                       command=lambda: messagebox.showinfo("Info", "Menu button clicked!"),
+                                       command=lambda: self._show_select_model_panel(),
                                        width=50,
                                        height=50,
                                        image=icon_img,
@@ -237,4 +241,8 @@ class PromptPanel(ctk.CTkFrame, FunctionObserver):
         self.help_btn.grid(row=4, column=6, padx=10, pady=10, sticky="se")
 
     ### events ###
-    
+    def _show_select_model_panel(self):
+        self.model_selection_panel = ModelSelectionPanel(self, self.model_mediator)
+        self.model_selection_panel.grab_set()
+        center_window(self.model_selection_panel, 450, 300)
+        self.master.wait_window(self.model_selection_panel)

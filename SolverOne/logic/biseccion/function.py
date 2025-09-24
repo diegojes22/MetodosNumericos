@@ -119,6 +119,11 @@ class Function:
         """Returns the Python-compatible transformed expression"""
         return self.expresion
     
+    def diferentiate_eval(self, x: float) -> float:
+        ''' Evaluates the derivative of the function at a given x value using numerical differentiation '''
+        h = 1e-7  # A small number for numerical differentiation
+        return (self.evaluate(x + h) - self.evaluate(x - h)) / (2 * h)
+    
     def __str__(self):
         return self.expresion
 

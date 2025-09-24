@@ -1,18 +1,25 @@
+import tkinter
 import customtkinter as ctk
+from panels.modelSelection import ModelMediator, ModelObserver, Model, BISECCION, NEWTON_RAPHSON, PY_TOOL
 from panels.const import *
 from logic.biseccion.function import Function, FunctionMediator, FunctionObserver
 import logic.biseccion.logic as lo
+
 
 from panels.basic import add_image_to_button
 
 import os
 
-class ResultsArea(ctk.CTkFrame, FunctionObserver):
-    def __init__(self, master, function_mediator: FunctionMediator, **kwargs):
+class ResultsArea(ctk.CTkFrame, FunctionObserver, ModelObserver):
+    def __init__(self, master, function_mediator: FunctionMediator, model_mediator: ModelMediator, **kwargs):
         ''' Constructor'''
         super().__init__(master, **kwargs)
         self.function_mediator = function_mediator
+        self.model_mediator = model_mediator
+
         self.function_mediator.register(self)
+        self.register(None)
+
         self.elements : list[float] = function_mediator.function.get_real_roots()
         self._config_grid()
         self._add_widgets()
@@ -22,6 +29,17 @@ class ResultsArea(ctk.CTkFrame, FunctionObserver):
     def destructor(self):
         ''' Destructor'''
         self.function_mediator.remove_observer(self)
+        self.unregister(None)
+
+    def update(self, model: Model):
+        pass
+
+    def unregister(self, model: Model):
+        self.model_mediator.remove_model_observer(self)
+
+    def register(self, model: Model):
+        self.model_mediator.register(self)
+
 
     # widgets methods
     def _add_widgets(self):
@@ -108,11 +126,14 @@ class ResultsArea(ctk.CTkFrame, FunctionObserver):
         self._add_widgets()
 
 class ResultsPanel(ctk.CTkToplevel, FunctionObserver):
-    def __init__(self, master, function_mediator : FunctionMediator, **kwargs):
+    def __init__(self, master, function_mediator : FunctionMediator, model_mediator: ModelMediator, **kwargs):
         ''' Contructor '''
         super().__init__(master, **kwargs)
         self.function_mediator : FunctionMediator = function_mediator
+        self.model_mediator = model_mediator
+
         self.function_mediator.register(self)
+        self.model_mediator.register(self)
 
         self._add_widgets()
 
@@ -121,6 +142,7 @@ class ResultsPanel(ctk.CTkToplevel, FunctionObserver):
     def destructor(self):
         ''' Destructor'''
         self.function_mediator.remove_observer(self)
+        self.model_mediator.remove_model_observer(self)
 
     # widgets methods
     def _add_widgets(self):
@@ -130,10 +152,23 @@ class ResultsPanel(ctk.CTkToplevel, FunctionObserver):
         self._add_solution_area()
 
     def _add_solution_area(self):
-        self.results_area = ResultsArea(self, self.function_mediator, height=80, width=300)
+        self.results_area = ResultsArea(self, self.function_mediator, model_mediator=self.model_mediator, height=80, width=300)
         self.results_area.pack(pady=10, padx=10, fill="x")
 
     def solver(self):
+        model_name = self.model_mediator.get_model()
+
+        print(model_name)
+        if model_name == BISECCION:
+            self.by_bisection()
+        elif model_name == NEWTON_RAPHSON:
+            tkinter.messagebox.showinfo("Info", "Método en desarrollo")
+        elif model_name == PY_TOOL:
+            tkinter.messagebox.showinfo("Info", "Método en desarrollo")
+        else:
+            tkinter.messagebox.showerror("Error", "Método no implementado")
+
+    def by_bisection(self):
         function = self.function_mediator.function
 
         intervals = lo.get_intervals(function)
@@ -155,3 +190,12 @@ class ResultsPanel(ctk.CTkToplevel, FunctionObserver):
     # Interface methods
     def update(self, function: Function):
         pass
+
+    def update(self, model: Model):
+        pass
+
+    def unregister(self, model: Model):
+        self.model_mediator.unregister(self)
+
+    def register(self, model: Model):
+        self.model_mediator.register(self)
