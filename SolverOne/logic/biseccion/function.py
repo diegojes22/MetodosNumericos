@@ -132,7 +132,7 @@ class FunctionObserver(ABC):
     Another words, this is teh contract
     '''
     @abstractmethod
-    def update(self, function: Function):
+    def update(function: Function):
         pass
 
 class FunctionMediator:
@@ -159,4 +159,8 @@ class FunctionMediator:
 
     def remove_observer(self, observer: FunctionObserver):
         ''' Removes an observer from the list, is the opposite of register '''
-        self.observers.remove(observer)
+        try:
+            self.observers.remove(observer)
+        except ValueError:
+            pass
+        

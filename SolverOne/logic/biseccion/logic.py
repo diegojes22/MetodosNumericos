@@ -1,5 +1,23 @@
 from math import *
-from biseccion.function import Function
+from logic.biseccion.function import Function
+
+# other math functions not included in math module
+def tan(x: float) -> float:
+    return sin(x) / cos(x)
+
+def tg (x: float) -> float:
+    return sin(x) / cos(x)
+
+def cot(x: float) -> float:
+    return cos(x) / sin(x)
+
+def sec(x: float) -> float:
+    return 1 / cos(x)
+
+def csc(x: float) -> float:
+    return 1 / sin(x)
+
+### Function analysis and root finding methods ###
 
 def get_multiples(number) -> list[int]:
     ''' Returns the multiples of a number '''
@@ -66,7 +84,7 @@ def get_intervals(function : Function) -> list[tuple[float, float]]:
 
     return intervals
 
-def biseccion(function, a: float, b: float, limit: int) -> float:
+def biseccion(function : Function, a: float, b: float, limit: int) -> float:
     ''' Bisection method to find a root of the function in the interval [a, b] '''
     m : float = 0   # Mid point
 
@@ -75,11 +93,11 @@ def biseccion(function, a: float, b: float, limit: int) -> float:
     f_m : float = 0
 
     for i in range(limit):
-        f_a = function(a)              # Calculate vars for this iteration
-        f_b = function(b)
+        f_a = function.evaluate(a)              # Calculate vars for this iteration
+        f_b = function.evaluate(b)
 
         m = (a + b) / 2
-        f_m = function(m)
+        f_m = function.evaluate(m)
 
         if(f_m == 0):  # Exact root found
             break

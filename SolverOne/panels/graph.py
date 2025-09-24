@@ -21,8 +21,10 @@ class GraphControls(ctk.CTkFrame, FunctionObserver):
         self._config()
         self._define_widgets()
 
-    def __del__(self):
-        ''' Destructor '''
+        self.bind("<Destroy>", lambda e: self.destructor())
+
+    def destructor(self):
+        ''' Destructor'''
         self.mediator.remove_observer(self)
 
     # Setters
@@ -192,6 +194,12 @@ class GraphPanel(ctk.CTkFrame, FunctionObserver):
 
         self.mediator.register(self)
         self._define_canvas()
+
+        self.bind("<Destroy>", lambda e: self.destructor())
+
+    def destructor(self):
+        ''' Destructor'''
+        self.mediator.remove_observer(self)
 
     # Getters
     def recalculate_center(self):

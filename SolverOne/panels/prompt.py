@@ -12,6 +12,7 @@ from tkinter import messagebox
 from panels import const
 from panels.graph import GraphDialog
 from panels.basic import add_image_to_button, center_window
+from panels.results import ResultsPanel
 
 import os
 from PIL import Image
@@ -117,7 +118,9 @@ class PromptInputArea(ctk.CTkFrame):
         #self.root.wait_window(graph)
 
     def on_resolve(self):
-        messagebox.showinfo("Info", "Resolve button clicked!")
+        results_panel = ResultsPanel(self.root, self.function_mediator)
+        results_panel.solver()
+        results_panel.show()
 
     def on_input_change(self):
         ''' Event handler for input field changes '''
@@ -127,7 +130,8 @@ class PromptInputArea(ctk.CTkFrame):
             new_function = Function(new_expression)
             self.function_mediator.set_function(new_function)
         except Exception as e:
-            print("Invalid function expression")
+            print(f"Invalid function expression: {e}")
+            print(e.__traceback__)
 
 
 class PromptPanel(ctk.CTkFrame, FunctionObserver):
