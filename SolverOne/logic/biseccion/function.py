@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 
 import math
+import sympy as sp
 import re
 
 class Function:
@@ -40,6 +41,9 @@ class Function:
     def get_real_roots(self) -> list[float]:
         ''' Returns the list of real roots '''
         return self.real_roots
+    
+    def clear_roots(self):
+        self.real_roots.clear()
     
     def _transform_expression(self, expression: str) -> str:
         """
@@ -126,6 +130,17 @@ class Function:
     
     def __str__(self):
         return self.expresion
+    
+    def absolute_solver(self):
+        x = sp.symbols('x')
+        ec = sp.sympify(self.original_expression.replace('^','**'))
+        solutions = sp.solve(ec, x)
+
+        # Filtramos reales y guardamos en self.real_roots
+        self.clear_roots()  # por si ya tenía raíces antes
+        for s in solutions:
+            if s.is_real:
+                self.append_real_root(float(s.evalf()))
 
 
 #### The Mediator Pattern Implementation ####

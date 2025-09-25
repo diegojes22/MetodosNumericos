@@ -1,6 +1,25 @@
 from logic.biseccion.function import Function
 
-def newton_raphson_method(func: Function, x0: float, tol: float = 1e-7, max_iter: int = 100) -> float:
+class ProcessReference:
+    def __init__(self):
+        self.process : str = ""
+
+    def append(self, text: str):
+        self.process += text
+
+    def get(self) -> str:
+        return self.process
+    
+    def set(self, text: str):
+        self.process = text
+
+    def clear(self):
+        self.process = ""
+
+    def __str__(self):
+        return self.process
+
+def newton_raphson_method(func: Function, x0: float, tol: float = 1e-7, max_iter: int = 100, procedure : ProcessReference | None= None) -> float:
     """
     Implements the Newton-Raphson method for finding roots of a function.
     
@@ -29,6 +48,10 @@ def newton_raphson_method(func: Function, x0: float, tol: float = 1e-7, max_iter
         if abs(x_n1 - x_n) < tol:
             return x_n1
         
+        if procedure is not None:
+            procedure.append(f"Iter {n+1}: x_n = {x_n}, f(x_n) = {f_xn}, f'(x_n) = {f_prime_xn}, x_n1 = {x_n1}\n")
+        
         x_n = x_n1
     
     raise ValueError("Maximum iterations reached. No solution found.")
+

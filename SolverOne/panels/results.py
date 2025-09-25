@@ -1,12 +1,14 @@
 import tkinter
 import customtkinter as ctk
+
 from panels.modelSelection import ModelMediator, ModelObserver, Model, BISECCION, NEWTON_RAPHSON, PY_TOOL
 from panels.const import *
+from panels.basic import add_image_to_button, center_window
+
 from logic.biseccion.function import Function, FunctionMediator, FunctionObserver
 import logic.biseccion.logic as lo
-
-
-from panels.basic import add_image_to_button
+from logic.newton_raphson.logic import newton_raphson_method
+from logic.newton_raphson.logic import ProcessReference
 
 import os
 
@@ -25,21 +27,6 @@ class ResultsArea(ctk.CTkFrame, FunctionObserver, ModelObserver):
         self._add_widgets()
 
         self.bind("<Destroy>", lambda e: self.destructor())
-
-    def destructor(self):
-        ''' Destructor'''
-        self.function_mediator.remove_observer(self)
-        self.unregister(None)
-
-    def update(self, model: Model):
-        pass
-
-    def unregister(self, model: Model):
-        self.model_mediator.remove_model_observer(self)
-
-    def register(self, model: Model):
-        self.model_mediator.register(self)
-
 
     # widgets methods
     def _add_widgets(self):
@@ -92,9 +79,30 @@ class ResultsArea(ctk.CTkFrame, FunctionObserver, ModelObserver):
             )
             lbl.grid(row=0, column=i, padx=10, pady=10)
 
+    def add_solutions(self):
+        # Append elements
+        for i, el in enumerate(self.elements):
+            lbl = ctk.CTkLabel(
+                self.scroll_frame, 
+                text=f"x{i} = {el}", 
+                width=150, 
+                height=40, 
+                fg_color=("#190CCE", "#3A3A3A"), 
+                bg_color="transparent",
+                corner_radius=8,
+                font=ctk.CTkFont(size=16, weight=BOLD)
+            )
+
     def _scroll(self, delta):
         """ Scroll the canvas horizontally"""
         self.canvas.xview_scroll(int(delta / 2), "units")
+
+    def _update_widgets(self):
+        ''' Updates the displayed widgets with the new elements '''
+        for widget in self.winfo_children():
+            widget.destroy()
+
+        self._add_widgets()
 
     def _config_grid(self):
         ''' 
@@ -118,12 +126,19 @@ class ResultsArea(ctk.CTkFrame, FunctionObserver, ModelObserver):
         self.elements = function.get_real_roots()
         self._update_widgets()
 
-    def _update_widgets(self):
-        ''' Updates the displayed widgets with the new elements '''
-        for widget in self.winfo_children():
-            widget.destroy()
+    def destructor(self):
+        ''' Destructor'''
+        self.function_mediator.remove_observer(self)
+        self.unregister(None)
 
-        self._add_widgets()
+    def update(self, model: Model):
+        pass
+
+    def unregister(self, model: Model):
+        self.model_mediator.remove_model_observer(self)
+
+    def register(self, model: Model):
+        self.model_mediator.register(self)
 
 class ResultsPanel(ctk.CTkToplevel, FunctionObserver):
     def __init__(self, master, function_mediator : FunctionMediator, model_mediator: ModelMediator, **kwargs):
@@ -146,42 +161,102 @@ class ResultsPanel(ctk.CTkToplevel, FunctionObserver):
 
     # widgets methods
     def _add_widgets(self):
+        self.minsize(800, 600)
+        center_window(self, 800, 600)
         self.title_label = ctk.CTkLabel(self, text="RESULTADOS", font=ctk.CTkFont(size=SUBTITLE_SIZE, weight=BOLD))
         self.title_label.pack(pady=10)
 
         self._add_solution_area()
+        self._add_text_table()
 
     def _add_solution_area(self):
         self.results_area = ResultsArea(self, self.function_mediator, model_mediator=self.model_mediator, height=80, width=300)
         self.results_area.pack(pady=10, padx=10, fill="x")
 
+    def _add_text_table(self):
+        self.table = ctk.CTkTextbox(self, width=400, height=200, font=ctk.CTkFont(size=16), wrap="none")
+        self.table.pack(pady=10, padx=10, fill="both", expand=True)
+
+    def add_procedure_in_table(self, procedure: str):
+        self.table.insert("0.0", procedure)
+
+    def append_procedure_in_table(self, procedure: str):
+        self.table.insert("end", procedure)
+
+    def clear_table(self):
+        self.table.delete("0.0", "end")
+
     def solver(self):
         model_name = self.model_mediator.get_model()
+        self.function_mediator.function.clear_roots()
 
         print(model_name)
         if model_name == BISECCION:
             self.by_bisection()
         elif model_name == NEWTON_RAPHSON:
-            tkinter.messagebox.showinfo("Info", "Método en desarrollo")
+            self.by_newton_raphson()
         elif model_name == PY_TOOL:
-            tkinter.messagebox.showinfo("Info", "Método en desarrollo")
+            self.function_mediator.function.absolute_solver()
         else:
             tkinter.messagebox.showerror("Error", "Método no implementado")
 
+        self.results_area.add_solutions()
+        self.results_area._update_widgets()
+
     def by_bisection(self):
         function = self.function_mediator.function
+        process = ProcessReference()
 
         intervals = lo.get_intervals(function)
 
         for interval in intervals:
             a, b = interval
-            root = lo.biseccion(function, a, b, 1000)
+            root = lo.biseccion(function, a, b, 1000, procedure=process)
+
             if root is not None:
                 print(f"Root found in interval [{a}, {b}]: {root}")
                 function.append_real_root(root)
             else:
                 print(f"No root found in interval [{a}, {b}]")
+
+            process.append(f"Root found in interval [{a}, {b}]: {root}\n" if root is not None else f"No root found in interval [{a}, {b}]\n")
+            process.append("\n")
         self.function_mediator.notify_observers()
+        #self.function_mediator.function.absolute_solver()
+
+        self.clear_table()
+        self.add_procedure_in_table(process.get())
+
+    def by_newton_raphson(self):
+        function = self.function_mediator.function
+        process = ProcessReference()
+
+        intervals = lo.get_intervals(function)
+
+        for interval in intervals:
+            a = interval[0]
+
+            try:
+                root = newton_raphson_method(function, a, procedure=process)
+                function.append_real_root(root)
+            except ValueError as e:
+                print(f"No root found aprox {a}: {e}")
+
+            process.append(f"Root found aprox {a}: {root}\n" if root is not None else f"No root found aprox {a}\n")
+            process.append("\n")
+
+        self.function_mediator.notify_observers()
+        #self.function_mediator.function.absolute_solver()
+
+        self.clear_table()
+        self.add_procedure_in_table(process.get())
+
+    def by_absolute_solver(self):
+        self.function_mediator.function.absolute_solver()
+        self.function_mediator.notify_observers()
+        self.table.config(font=ctk.CTkFont(size=20, weight=BOLD))
+        self.clear_table()
+        self.add_procedure_in_table("No es posible ver el procedimiento con el modelo actual\n debido a que no cuenta con subcripcion premium.\n")
 
     def show(self):
         self.grab_set()

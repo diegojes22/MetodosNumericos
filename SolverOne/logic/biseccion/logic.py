@@ -1,5 +1,6 @@
 from math import *
 from logic.biseccion.function import Function
+from logic.newton_raphson.logic import ProcessReference
 
 # other math functions not included in math module
 def tan(x: float) -> float:
@@ -84,13 +85,13 @@ def get_intervals(function : Function) -> list[tuple[float, float]]:
 
     return intervals
 
-def biseccion(function : Function, a: float, b: float, limit: int) -> float:
+def biseccion(function : Function, a: float, b: float, limit: int, procedure : ProcessReference | None= None) -> float:
     ''' Bisection method to find a root of the function in the interval [a, b] '''
     m : float = 0   # Mid point
 
     f_a : float = 0
     f_b : float = 0
-    f_m : float = 0
+    f_m : float = 0 
 
     for i in range(limit):
         f_a = function.evaluate(a)              # Calculate vars for this iteration
@@ -107,5 +108,8 @@ def biseccion(function : Function, a: float, b: float, limit: int) -> float:
             b = m
         else:
             a = m
+
+        if procedure is not None:
+            procedure.append(f"Iter {i+1}: a = {a}, b = {b}, m = {m}, f(a) = {f_a}, f(b) = {f_b}, f(m) = {f_m}\n")
 
     return m

@@ -189,3 +189,11 @@ cython_debug/
 ############# Projects ignores #############
 out/
 Utils/
+
+# Ignore compiled binary files
+*.exe
+*.dll
+*.so
+build/
+*.spec
+dist/
