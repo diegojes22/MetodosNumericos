@@ -71,7 +71,11 @@ def get_intervals(function : Function) -> list[tuple[float, float]]:
 
     print(f"Rational candidates: {rational_nums}")
     for r in rational_nums:
-        results.append((function.evaluate(r)))
+        try:
+            results.append((function.evaluate(r)))
+        except ValueError as e:
+            results.append(float('inf'))
+            continue
 
         if(r == 0):
             function.append_real_root(rational_nums[i])
@@ -100,16 +104,16 @@ def biseccion(function : Function, a: float, b: float, limit: int, procedure : P
         m = (a + b) / 2
         f_m = function.evaluate(m)
 
-        if(f_m == 0):  # Exact root found
+        if(f_m == 0 or (f_m * 100) == 0):  # Exact root found
             break
+
+        if procedure is not None:
+            procedure.append(f"Iter {i+1}: a = {a}, b = {b}, m = {m}, f(a) = {f_a}, f(b) = {f_b}, f(m) = {f_m}\n")
 
         # refine new interval
         if f_a * f_m < 0:
             b = m
         else:
             a = m
-
-        if procedure is not None:
-            procedure.append(f"Iter {i+1}: a = {a}, b = {b}, m = {m}, f(a) = {f_a}, f(b) = {f_b}, f(m) = {f_m}\n")
 
     return m

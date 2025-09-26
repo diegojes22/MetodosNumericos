@@ -247,9 +247,70 @@ class GraphPanel(ctk.CTkFrame, FunctionObserver):
         self.clear_canvas()
 
         self.get_center()
+        self.draw_grid()
+        self.draw_mini_grid()
         self.draw_ejes()
+        self.place_x_scale_num()
+        self.place_y_scale_num()
 
         self.draw_function()
+
+    def place_x_scale_num(self):
+        ''' Place the scale numbers on the X axis '''
+        width = self.canvas.winfo_width()
+        height = self.canvas.winfo_height()
+
+        for x in range(0, width, self.scale):
+            coord_x = (x - self.center[0]) / self.scale
+            if coord_x != 0:
+                self.canvas.create_text(x, self.center[1] + 10, text=f"{coord_x:.1f}", fill="#ffffff", font=("Arial", 10))
+        
+        for x in range(width, 0, -self.scale):
+            coord_x = (x - self.center[0]) / self.scale
+            if coord_x != 0:
+                self.canvas.create_text(x, self.center[1] + 10, text=f"{coord_x:.1f}", fill="#ffffff", font=("Arial", 10))
+
+    def place_y_scale_num(self):
+        ''' Place the scale numbers on the Y axis '''
+        width = self.canvas.winfo_width()
+        height = self.canvas.winfo_height()
+
+        for y in range(0, height, self.scale):
+            coord_y = (self.center[1] - y) / self.scale
+            if coord_y != 0:
+                self.canvas.create_text(self.center[0] + 15, y, text=f"{coord_y:.1f}", fill="#ffffff", font=("Arial", 10))
+        
+        for y in range(height, 0, -self.scale):
+            coord_y = (self.center[1] - y) / self.scale
+            if coord_y != 0:
+                self.canvas.create_text(self.center[0] + 15, y, text=f"{coord_y:.1f}", fill="#ffffff", font=("Arial", 10))
+
+    def draw_mini_grid(self):
+        ''' Draw the mini grid in the canvas if the scale is big enough '''
+        width = self.canvas.winfo_width()
+        height = self.canvas.winfo_height()
+
+        if self.scale < 10:  # Only draw mini grid if scale is small enough
+            # Vertical lines
+            for x in range(0, width, self.scale // 5):
+                self.canvas.create_line(x, 0, x, height, fill="#333333")
+        
+            # Horizontal lines
+            for y in range(0, height, self.scale // 5):
+                self.canvas.create_line(0, y, width, y, fill="#333333")
+
+    def draw_grid(self):
+        ''' Draw the grid in the canvas '''
+        width = self.canvas.winfo_width()
+        height = self.canvas.winfo_height()
+
+        # Vertical lines
+        for x in range(0, width, self.scale):
+            self.canvas.create_line(x, 0, x, height, fill="#444444")
+            
+        # Horizontal lines
+        for y in range(0, height, self.scale):
+            self.canvas.create_line(0, y, width, y, fill="#444444")
 
     def draw_ejes(self):
         ''' Draw the X and Y axes in the canvas '''

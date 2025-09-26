@@ -1,6 +1,5 @@
 '''
 The script that runs the application
-but the interface is not complete yet
 '''
 import customtkinter as ctk
 from panels import prompt

@@ -146,6 +146,7 @@ class ResultsPanel(ctk.CTkToplevel, FunctionObserver):
         super().__init__(master, **kwargs)
         self.function_mediator : FunctionMediator = function_mediator
         self.model_mediator = model_mediator
+        self.custom_range : tuple[float, float] = None
 
         self.function_mediator.register(self)
         self.model_mediator.register(self)
@@ -153,6 +154,23 @@ class ResultsPanel(ctk.CTkToplevel, FunctionObserver):
         self._add_widgets()
 
         self.bind("<Destroy>", lambda e: self.destructor())
+
+    def set_custom_range(self, min: float, max : float):
+        '''
+        Cuando el analizador de rangos no logra detectar los rangos de forma
+        automatica, el usuario puede definir un rango personalizado.
+
+        Esto se pasa de forma manual a travez de este metodo y se guarda en una
+        tupla
+        '''
+        self.custom_range = (min, max)
+
+    def get_custom_range(self) -> tuple[float, float]:
+        '''
+        Devuelve el rango personalizado definido por el usuario.
+        Tal vez se quite porque no creo que sea necesario.
+        '''
+        return self.custom_range
 
     def destructor(self):
         ''' Destructor'''
@@ -209,16 +227,32 @@ class ResultsPanel(ctk.CTkToplevel, FunctionObserver):
 
         intervals = lo.get_intervals(function)
 
+        if self.custom_range is not None:
+            a, b = self.custom_range
+
+            root = lo.biseccion(function, a, b, 100, procedure=process)
+            if root is not None:
+                function.append_real_root(root)
+
+                self.function_mediator.notify_observers()
+
+                self.clear_table()
+                self.add_procedure_in_table(process.get())
+                return;
+            
+
         for interval in intervals:
             a, b = interval
-            root = lo.biseccion(function, a, b, 1000, procedure=process)
+            root = lo.biseccion(function, a, b, 100, procedure=process)
 
+            function.append_real_root(root)
+            '''
             if root is not None:
                 print(f"Root found in interval [{a}, {b}]: {root}")
                 function.append_real_root(root)
             else:
                 print(f"No root found in interval [{a}, {b}]")
-
+            '''
             process.append(f"Root found in interval [{a}, {b}]: {root}\n" if root is not None else f"No root found in interval [{a}, {b}]\n")
             process.append("\n")
         self.function_mediator.notify_observers()
@@ -232,6 +266,23 @@ class ResultsPanel(ctk.CTkToplevel, FunctionObserver):
         process = ProcessReference()
 
         intervals = lo.get_intervals(function)
+
+        if self.custom_range is not None:
+            a = self.custom_range[0]
+
+            try:
+                root = newton_raphson_method(function, a, procedure=process)
+                function.append_real_root(root)
+
+                process.append(f"Root found aprox {a}: {root}\n" if root is not None else f"No root found aprox {a}\n")
+                process.append("\n")
+                self.function_mediator.notify_observers()
+
+                self.clear_table()
+                self.add_procedure_in_table(process.get())
+                return
+            except ValueError as e:
+                print(f"No root found aprox {a}: {e}")
 
         for interval in intervals:
             a = interval[0]

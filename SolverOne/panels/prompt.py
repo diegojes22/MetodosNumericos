@@ -15,6 +15,8 @@ from panels.basic import add_image_to_button, center_window
 from panels.results import ResultsPanel
 from panels.modelSelection import ModelSelectionPanel, ModelMediator, ModelObserver
 
+from panels.custom_range_dialog import DialogoNumeros
+
 import os
 from PIL import Image
 
@@ -121,8 +123,11 @@ class PromptInputArea(ctk.CTkFrame):
 
     def on_resolve(self):
         results_panel = ResultsPanel(self.root, self.function_mediator, self.model_mediator)
+        if self.root.custom_range is not None:
+            results_panel.set_custom_range(min=self.root.custom_range[0], max=self.root.custom_range[1])
         results_panel.solver()
         results_panel.show()
+        self.root.custom_range = None
 
     def on_input_change(self):
         ''' Event handler for input field changes '''
@@ -148,6 +153,8 @@ class PromptPanel(ctk.CTkFrame, FunctionObserver):
         self.function_mediator: FunctionMediator = mediator
         self.model_mediator : ModelMediator = ModelMediator()
 
+        self.custom_range : tuple[float, float] = None
+
         self.function_mediator.register(self)
 
         self._add_widgets()
@@ -169,7 +176,7 @@ class PromptPanel(ctk.CTkFrame, FunctionObserver):
         +---+---+---+---+---+
         |   |   | I |   |   |
         +---+---+---+---+---+
-        |   |   |   |   |   |
+        |   |   |   |   | R |
         +---+---+---+---+---+
         |   |   |   |   | H |
         +---+---+---+---+---+
@@ -202,9 +209,40 @@ class PromptPanel(ctk.CTkFrame, FunctionObserver):
         # adding the buttons
         self._add_menu_btn()
         self._add_help_btn()
+        self._add_custom_range_button()
 
         # If you need add more widgets, add them here
         # . . .
+
+    def _open_custom_range_dialog(self):
+        dialog = DialogoNumeros(self)
+
+        temp_range = dialog.obtener_valores()
+
+        if temp_range is not None:
+            self.custom_range = temp_range
+
+    def _add_custom_range_button(self):
+        '''
+        El boton abre un dialogo para que el usuario
+        defina un rango personalizado para la grafica
+        y lo guarda en self.custom_range
+        '''
+
+        img_path = os.path.join(os.path.dirname(__file__), "..", "sources", "img", "range_40p.png")
+        img_path = os.path.abspath(img_path)
+        icon_img = ctk.CTkImage(light_image=Image.open(img_path), size=(40, 40))
+
+        self.custom_range_button = ctk.CTkButton(
+            self,
+            text="",
+            width=50,
+            height=50,
+            fg_color="transparent",
+            image=icon_img,
+            command=self._open_custom_range_dialog,
+        )
+        self.custom_range_button.grid(row=0, column=6, padx=10, pady=10, sticky="ne")
 
     def _add_menu_btn(self):
         ''' Adds the menu button to the panel '''

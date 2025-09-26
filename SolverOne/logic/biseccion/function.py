@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 
 import math
+from math import *
 import sympy as sp
 import re
 

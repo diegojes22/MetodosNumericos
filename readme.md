@@ -68,3 +68,9 @@ Una vez este activado el entorno virtual, deberas instalar las siguientes depend
 ``` sh 
 pip install pillow customtkinter tkinter
 ```
+
+Para compilar el archivo `./SolverOne/main.py` se debe descargar el modulo de **PyInstaler**
+y luego se debera ejecutar el siguiente comando:
+```sh
+ pyinstaller --onefile --windowed --name="SolverOne" --add-data "logic/*;logic/" --add-data "panels/*;panels/" --add-data "sources/*;sources/" --hidden-import="customtkinter" main.py
+```
