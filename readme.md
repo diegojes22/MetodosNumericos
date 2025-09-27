@@ -32,15 +32,13 @@ Aquí encontrarás soluciones implementadas principalmente en **Python**, aunque
 
 ---
 # Novedades del commit
-- Se ha implemenbtado el patron de diseño **Mediador** para que todos los componentes de la interfaz puedan trabajar con una sola referencia, organizando y mejorando el codigo a futuro.
-- Se ha cambiado la estructura del repositorio.
-- EL uso de **customtkinter** es oficial.
-- Se ha mejorado el concepto de la UI la cual esta disponible en **Figma**
-- Para que el proyecto se pueda ejecutar se necesita un entorno virtual.
+- Interfaz grafica de usuario completa en un 90%
+- Correcion de errores menores con respecto a la eleccion de los modelos
+- Refactorizacion interna del codigo
 
 > Notas: 
 > - Este readme sera modificado en los proximos commits
-
+> - Proximamente se finalizara la version alpha para empezar con la beta.
 ----
 # Sobre el entorno vitual
 Es necesario crear un entorno virtual de la siguiente forma:

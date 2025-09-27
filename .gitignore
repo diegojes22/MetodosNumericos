@@ -190,6 +190,8 @@ cython_debug/
 out/
 Utils/
 
+codigo_completo.html
+
 # Ignore compiled binary files
 *.exe
 *.dll
