@@ -16,6 +16,7 @@ from panels.results import ResultsPanel
 from panels.modelSelection import ModelSelectionPanel, ModelMediator, ModelObserver
 
 from panels.custom_range_dialog import DialogoNumeros
+from panels.secret import SecretDialog
 
 import os
 from PIL import Image
@@ -270,13 +271,13 @@ class PromptPanel(ctk.CTkFrame, FunctionObserver):
 
         self.help_btn = ctk.CTkButton(self, 
                                        text="",
-                                       command=lambda: messagebox.showinfo("Info", "Help button clicked!"),
                                        width=50,
                                        height=50,
                                        image=icon_img,
                                        fg_color="transparent",
                                        )
         self.help_btn.grid(row=4, column=6, padx=10, pady=10, sticky="se")
+        self.help_btn.bind("<Double-1>", lambda event: self._on_help())
 
     ### events ###
     def _show_select_model_panel(self):
@@ -284,3 +285,10 @@ class PromptPanel(ctk.CTkFrame, FunctionObserver):
         self.model_selection_panel.grab_set()
         center_window(self.model_selection_panel, 450, 300)
         self.master.wait_window(self.model_selection_panel)
+
+    def _on_help(self):
+        dialog = SecretDialog(self)
+        center_window(dialog, 300, 200)
+        dialog.grab_set()
+        self.master.wait_window(dialog)
+

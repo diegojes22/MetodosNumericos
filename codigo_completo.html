@@ -1,0 +1,4691 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Código Fuente - Métodos Numéricos</title>
+    <style>
+        body {
+            font-family: 'Courier New', monospace;
+            margin: 40px;
+            line-height: 1.4;
+            font-size: 11px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            font-family: Arial, sans-serif;
+        }
+        
+        .header h1 {
+            color: #2c3e50;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+        
+        .header .info {
+            color: #7f8c8d;
+            font-size: 14px;
+        }
+        
+        .file-section {
+            margin-bottom: 40px;
+            page-break-inside: avoid;
+        }
+        
+        .file-header {
+            background-color: #3498db;
+            color: white;
+            padding: 10px 15px;
+            font-weight: bold;
+            font-size: 14px;
+            margin-bottom: 0;
+            border-radius: 5px 5px 0 0;
+        }
+        
+        .file-path {
+            background-color: #ecf0f1;
+            padding: 5px 15px;
+            font-size: 11px;
+            color: #2c3e50;
+            margin: 0;
+            border-bottom: 1px solid #bdc3c7;
+        }
+        
+        .code-block {
+            background-color: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-top: none;
+            padding: 0;
+            margin: 0;
+            font-family: 'Courier New', monospace;
+            font-size: 10px;
+            border-radius: 0 0 5px 5px;
+        }
+        
+        .code-content {
+            padding: 15px;
+            white-space: pre-wrap;
+            overflow-x: auto;
+        }
+        
+        .line-numbers {
+            background-color: #f1f3f4;
+            color: #70757a;
+            padding: 15px 10px;
+            border-right: 1px solid #e9ecef;
+            float: left;
+            font-size: 9px;
+            line-height: 1.4;
+            user-select: none;
+        }
+        
+        .code-with-lines {
+            overflow: hidden;
+        }
+        
+        .code-main {
+            margin-left: 60px;
+            padding: 15px;
+        }
+        
+        .toc {
+            background-color: #f8f9fa;
+            border: 1px solid #e9ecef;
+            padding: 20px;
+            margin-bottom: 30px;
+            border-radius: 5px;
+        }
+        
+        .toc h2 {
+            margin-top: 0;
+            color: #2c3e50;
+            font-family: Arial, sans-serif;
+        }
+        
+        .toc ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        
+        .toc li {
+            padding: 5px 0;
+            border-bottom: 1px dotted #bdc3c7;
+        }
+        
+        .toc a {
+            text-decoration: none;
+            color: #3498db;
+        }
+        
+        .toc a:hover {
+            text-decoration: underline;
+        }
+        
+        .stats {
+            background-color: #e8f5e8;
+            border-left: 4px solid #27ae60;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        
+        @media print {
+            body { margin: 20px; }
+            .file-section { page-break-after: auto; }
+            .code-block { page-break-inside: avoid; }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Proyecto Métodos Numéricos</h1>
+        <div class="info">
+            Código fuente completo<br>
+            Generado el: 26/09/2025 a las 13:44<br>
+            Total de archivos: 14
+        </div>
+    </div>
+
+    <div class="toc">
+        <h2>📋 Índice de Archivos</h2>
+        <ul>
+            <li><a href="#SolverOne_logic_biseccion_function_py">SolverOne\logic\biseccion\function.py</a></li>
+            <li><a href="#SolverOne_logic_biseccion_logic_py">SolverOne\logic\biseccion\logic.py</a></li>
+            <li><a href="#SolverOne_logic_newton_raphson_logic_py">SolverOne\logic\newton_raphson\logic.py</a></li>
+            <li><a href="#SolverOne_main_py">SolverOne\main.py</a></li>
+            <li><a href="#SolverOne_panels_basic_py">SolverOne\panels\basic.py</a></li>
+            <li><a href="#SolverOne_panels_color_picker_py">SolverOne\panels\color_picker.py</a></li>
+            <li><a href="#SolverOne_panels_const_py">SolverOne\panels\const.py</a></li>
+            <li><a href="#SolverOne_panels_custom_range_dialog_py">SolverOne\panels\custom_range_dialog.py</a></li>
+            <li><a href="#SolverOne_panels_graph_py">SolverOne\panels\graph.py</a></li>
+            <li><a href="#SolverOne_panels_modelSelection_py">SolverOne\panels\modelSelection.py</a></li>
+            <li><a href="#SolverOne_panels_prompt_py">SolverOne\panels\prompt.py</a></li>
+            <li><a href="#SolverOne_panels_results_py">SolverOne\panels\results.py</a></li>
+            <li><a href="#count_lines_py">count_lines.py</a></li>
+            <li><a href="#generate_pdf_code_py">generate_pdf_code.py</a></li>
+        </ul>
+    </div>
+
+    <div class="stats">
+        <strong>📊 Estadísticas del Proyecto:</strong><br>
+        • 14 archivos Python<br>
+        • 2185 líneas totales<br>
+        • 1609 líneas de código<br>
+        • Aproximadamente 43 páginas (estimado)
+    </div>
+
+    <div class="file-section" id="SolverOne_logic_biseccion_function_py">
+        <div class="file-header">📄 function.py</div>
+        <div class="file-path">SolverOne\logic\biseccion\function.py (187 líneas)</div>
+        <div class="code-block">
+            <div class="code-with-lines">
+                <div class="line-numbers">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187</div>
+                <div class="code-main">from abc import ABC, abstractmethod
+
+import math
+from math import *
+import sympy as sp
+import re
+
+class Function:
+    &#x27;&#x27;&#x27;
+    Class to represent a mathematical function
+    &#x27;&#x27;&#x27;
+    def __init__(self, expresion: str):
+        &#x27;&#x27;&#x27; Constructor&#x27;&#x27;&#x27;
+        self.original_expression = expresion  # Original user expression
+        self.expresion = self._transform_expression(expresion)
+        self.real_roots : list[float] = []
+
+    def evaluate(self, x: float) -&gt; float:
+        &#x27;&#x27;&#x27; Evaluates the polynomial function at a given x value &#x27;&#x27;&#x27;
+        return eval(self.expresion.replace(&#x27;x&#x27;, f&#x27;({x})&#x27;))
+    
+    def get_coefficients(self) -&gt; list[float]:
+        &#x27;&#x27;&#x27; Returns the coefficients of the polynomial function&#x27;&#x27;&#x27;
+        terms = self.expresion.replace(&#x27;-&#x27;, &#x27;+-&#x27;).split(&#x27;+&#x27;)
+        coefficients : list[float] = []
+
+        for term in terms:
+            term = term.strip()
+            if(term == &#x27;&#x27;):
+                continue
+
+            val = eval(term.replace(&#x27;x&#x27;, (&#x27;(1)&#x27;)))
+            if val != 0:
+                coefficients.append(val)
+
+        return coefficients
+    
+    def append_real_root(self, root: float):
+        &#x27;&#x27;&#x27; Appends a real root to the list of real roots &#x27;&#x27;&#x27;
+        self.real_roots.append(root)
+
+    def get_real_roots(self) -&gt; list[float]:
+        &#x27;&#x27;&#x27; Returns the list of real roots &#x27;&#x27;&#x27;
+        return self.real_roots
+    
+    def clear_roots(self):
+        self.real_roots.clear()
+    
+    def _transform_expression(self, expression: str) -&gt; str:
+        &quot;&quot;&quot;
+        Transforms mathematical notation to Python-compatible notation
+        Examples:
+        - x^2 -&gt; x**2
+        - ln(x) -&gt; math.log(x)  # Natural logarithm
+        - log(x) -&gt; math.log10(x)  # Base 10 logarithm (when no base specified)
+        - log(x, b) -&gt; math.log(x, b)  # Logarithm with base b
+        - sen(x) -&gt; math.sin(x)
+        - cos(x) -&gt; math.cos(x)
+        - tan(x) -&gt; math.tan(x)
+        - sqrt(x) -&gt; math.sqrt(x)
+        - e^x -&gt; math.exp(x)
+        &quot;&quot;&quot;
+        # Remove spaces for easier processing
+        expr = expression.replace(&#x27; &#x27;, &#x27;&#x27;)
+        
+        # Replace power notation x^n with x**n
+        expr = re.sub(r&#x27;(\w+|\([^)]+\))\^(\w+|\([^)]+\))&#x27;, r&#x27;\1**\2&#x27;, expr)
+        
+        # Handle logarithms more carefully
+        # First handle log with explicit base: log(x, base) -&gt; math.log(x, base)
+        expr = re.sub(r&#x27;log\(([^,)]+),([^)]+)\)&#x27;, r&#x27;math.log(\1,\2)&#x27;, expr)
+        
+        # Then handle ln (natural log): ln(x) -&gt; math.log(x)
+        expr = re.sub(r&#x27;ln\(&#x27;, &#x27;math.log(&#x27;, expr)
+        
+        # Finally handle log without base (assume base 10): log(x) -&gt; math.log10(x)
+        # This regex ensures we don&#x27;t match already transformed math.log
+        expr = re.sub(r&#x27;(?&lt;!math\.)log\(&#x27;, &#x27;math.log10(&#x27;, expr)
+        
+        # Replace mathematical functions
+        transformations = [
+            # Trigonometric functions (Spanish notation)
+            (r&#x27;sen\(&#x27;, &#x27;math.sin(&#x27;),
+            (r&#x27;cos\(&#x27;, &#x27;math.cos(&#x27;),
+            (r&#x27;tan\(&#x27;, &#x27;math.tan(&#x27;),
+            (r&#x27;sec\(&#x27;, &#x27;(1/math.cos(&#x27;),
+            (r&#x27;csc\(&#x27;, &#x27;(1/math.sin(&#x27;),
+            (r&#x27;cot\(&#x27;, &#x27;(1/math.tan(&#x27;),
+            
+            # Inverse trigonometric functions
+            (r&#x27;arcsen\(&#x27;, &#x27;math.asin(&#x27;),
+            (r&#x27;arccos\(&#x27;, &#x27;math.acos(&#x27;),
+            (r&#x27;arctan\(&#x27;, &#x27;math.atan(&#x27;),
+            (r&#x27;asen\(&#x27;, &#x27;math.asin(&#x27;),
+            (r&#x27;acos\(&#x27;, &#x27;math.acos(&#x27;),
+            (r&#x27;atan\(&#x27;, &#x27;math.atan(&#x27;),
+            
+            # Exponential functions
+            (r&#x27;exp\(&#x27;, &#x27;math.exp(&#x27;),
+            (r&#x27;sqrt\(&#x27;, &#x27;math.sqrt(&#x27;),
+            
+            # Mathematical constants
+            (r&#x27;\be\b&#x27;, &#x27;math.e&#x27;),
+            (r&#x27;\bpi\b&#x27;, &#x27;math.pi&#x27;),
+        ]
+        
+        # Apply all transformations
+        for pattern, replacement in transformations:
+            expr = re.sub(pattern, replacement, expr)
+        
+        # Handle e^x notation specially
+        expr = re.sub(r&#x27;math\.e\*\*(\w+|\([^)]+\))&#x27;, r&#x27;math.exp(\1)&#x27;, expr)
+        
+        # Fix closing parentheses for sec, csc, cot
+        expr = re.sub(r&#x27;\(1/math\.(cos|sin|tan)\(([^)]+)\)\)&#x27;, r&#x27;(1/math.\1(\2))&#x27;, expr)
+        
+        return expr
+    
+    def get_original_expression(self) -&gt; str:
+        &quot;&quot;&quot;Returns the original expression as entered by the user&quot;&quot;&quot;
+        return self.original_expression
+    
+    def get_transformed_expression(self) -&gt; str:
+        &quot;&quot;&quot;Returns the Python-compatible transformed expression&quot;&quot;&quot;
+        return self.expresion
+    
+    def diferentiate_eval(self, x: float) -&gt; float:
+        &#x27;&#x27;&#x27; Evaluates the derivative of the function at a given x value using numerical differentiation &#x27;&#x27;&#x27;
+        h = 1e-7  # A small number for numerical differentiation
+        return (self.evaluate(x + h) - self.evaluate(x - h)) / (2 * h)
+    
+    def __str__(self):
+        return self.expresion
+    
+    def absolute_solver(self):
+        x = sp.symbols(&#x27;x&#x27;)
+        ec = sp.sympify(self.original_expression.replace(&#x27;^&#x27;,&#x27;**&#x27;))
+        solutions = sp.solve(ec, x)
+
+        # Filtramos reales y guardamos en self.real_roots
+        self.clear_roots()  # por si ya tenía raíces antes
+        for s in solutions:
+            if s.is_real:
+                self.append_real_root(float(s.evalf()))
+
+
+#### The Mediator Pattern Implementation ####
+# These classes need a update because they are not compatible
+# with the new Function class
+class FunctionObserver(ABC):
+    &#x27;&#x27;&#x27;
+    Interface for observers that need to be notified when the function changes.
+    Another words, this is teh contract
+    &#x27;&#x27;&#x27;
+    @abstractmethod
+    def update(function: Function):
+        pass
+
+class FunctionMediator:
+    &#x27;&#x27;&#x27;
+    Mediator class for managing the communication between the function and its observers.
+    &#x27;&#x27;&#x27;
+    def __init__(self):
+        self.observers = []
+        self.function = None
+
+    def set_function(self, function: Function):
+        self.function = function
+        self.notify_observers()
+
+    def notify_observers(self):
+        for observer in self.observers:
+            observer.update(self.function)
+
+    def register(self, observer: FunctionObserver):
+        &#x27;&#x27;&#x27;
+        If your class needs to be notified when the function changes, register it here.
+        &#x27;&#x27;&#x27;
+        self.observers.append(observer)
+
+    def remove_observer(self, observer: FunctionObserver):
+        &#x27;&#x27;&#x27; Removes an observer from the list, is the opposite of register &#x27;&#x27;&#x27;
+        try:
+            self.observers.remove(observer)
+        except ValueError:
+            pass
+        </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="file-section" id="SolverOne_logic_biseccion_logic_py">
+        <div class="file-header">📄 logic.py</div>
+        <div class="file-path">SolverOne\logic\biseccion\logic.py (119 líneas)</div>
+        <div class="code-block">
+            <div class="code-with-lines">
+                <div class="line-numbers">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119</div>
+                <div class="code-main">from math import *
+from logic.biseccion.function import Function
+from logic.newton_raphson.logic import ProcessReference
+
+# other math functions not included in math module
+def tan(x: float) -&gt; float:
+    return sin(x) / cos(x)
+
+def tg (x: float) -&gt; float:
+    return sin(x) / cos(x)
+
+def cot(x: float) -&gt; float:
+    return cos(x) / sin(x)
+
+def sec(x: float) -&gt; float:
+    return 1 / cos(x)
+
+def csc(x: float) -&gt; float:
+    return 1 / sin(x)
+
+### Function analysis and root finding methods ###
+
+def get_multiples(number) -&gt; list[int]:
+    &#x27;&#x27;&#x27; Returns the multiples of a number &#x27;&#x27;&#x27;
+    multiples : list[int] = []
+
+    for n in range(1, number + 1):
+        if(number % n == 0):
+            multiples.append(n)
+
+    return multiples
+
+def get_rational_roots(p : float, q : float) -&gt; list[float]:
+    &#x27;&#x27;&#x27; Returns the possible rational roots of a polynomial using the Rational Root Theorem &#x27;&#x27;&#x27;
+    multiplesP = get_multiples(p)
+    multiplesQ = get_multiples(q)
+
+    roots : list[float] = []
+
+    for i in range(len(multiplesP)):
+        for j in range(len(multiplesQ)):
+            roots.append(multiplesP[i] / multiplesQ[j])
+            roots.append(-multiplesP[i] / multiplesQ[j])
+
+    # order and remove duplicates
+    roots = list(set(roots))
+    roots.sort()
+
+    return roots    
+
+def count_real_solutions(function : Function) -&gt; int:
+    &#x27;&#x27;&#x27; Uses Descartes&#x27; Rule of Signs to count the number of possible real solutions of a polynomial function &#x27;&#x27;&#x27;
+    coefficients : list[float] = function.get_coefficients()
+    changes : int = 0
+    
+    for i in range(len(coefficients)-1):
+        if coefficients[i] * coefficients[i+1] &lt; 0:
+            changes += 1
+
+    return changes
+
+def get_intervals(function : Function) -&gt; list[tuple[float, float]]:
+    &#x27;&#x27;&#x27; Returns a list of intervals [a, b] where f(a) and f(b) have opposite signs &#x27;&#x27;&#x27;
+    intervals : list[tuple[float, float]] = []
+
+    rational_nums : list[float] = get_rational_roots(
+        abs(int(function.get_coefficients()[-1])), 
+        abs(int(function.get_coefficients()[0]))
+    )
+    results : list[float] = []
+
+    print(f&quot;Rational candidates: {rational_nums}&quot;)
+    for r in rational_nums:
+        try:
+            results.append((function.evaluate(r)))
+        except ValueError as e:
+            results.append(float(&#x27;inf&#x27;))
+            continue
+
+        if(r == 0):
+            function.append_real_root(rational_nums[i])
+
+    i = 0
+    while i &lt; len(results)-1:
+        if results[i] * results[i + 1] &lt; 0:
+            intervals.append((rational_nums[i], rational_nums[i + 1]))
+        
+        i += 1
+
+    return intervals
+
+def biseccion(function : Function, a: float, b: float, limit: int, procedure : ProcessReference | None= None) -&gt; float:
+    &#x27;&#x27;&#x27; Bisection method to find a root of the function in the interval [a, b] &#x27;&#x27;&#x27;
+    m : float = 0   # Mid point
+
+    f_a : float = 0
+    f_b : float = 0
+    f_m : float = 0 
+
+    for i in range(limit):
+        f_a = function.evaluate(a)              # Calculate vars for this iteration
+        f_b = function.evaluate(b)
+
+        m = (a + b) / 2
+        f_m = function.evaluate(m)
+
+        if(f_m == 0 or (f_m * 100) == 0):  # Exact root found
+            break
+
+        if procedure is not None:
+            procedure.append(f&quot;Iter {i+1}: a = {a}, b = {b}, m = {m}, f(a) = {f_a}, f(b) = {f_b}, f(m) = {f_m}\n&quot;)
+
+        # refine new interval
+        if f_a * f_m &lt; 0:
+            b = m
+        else:
+            a = m
+
+    return m</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="file-section" id="SolverOne_logic_newton_raphson_logic_py">
+        <div class="file-header">📄 logic.py</div>
+        <div class="file-path">SolverOne\logic\newton_raphson\logic.py (58 líneas)</div>
+        <div class="code-block">
+            <div class="code-with-lines">
+                <div class="line-numbers">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58</div>
+                <div class="code-main">from logic.biseccion.function import Function
+
+class ProcessReference:
+    def __init__(self):
+        self.process : str = &quot;&quot;
+
+    def append(self, text: str):
+        self.process += text
+
+    def get(self) -&gt; str:
+        return self.process
+    
+    def set(self, text: str):
+        self.process = text
+
+    def clear(self):
+        self.process = &quot;&quot;
+
+    def __str__(self):
+        return self.process
+
+def newton_raphson_method(func: Function, x0: float, tol: float = 1e-7, max_iter: int = 100, procedure : ProcessReference | None= None) -&gt; float:
+    &quot;&quot;&quot;
+    Implements the Newton-Raphson method for finding roots of a function.
+    
+    Parameters:
+    func (Function): The function object containing the expression and its evaluation method.
+    x0 (float): Initial guess for the root.
+    tol (float): Tolerance for stopping criterion.
+    max_iter (int): Maximum number of iterations.
+    
+    Returns:
+    float: Approximation of the root.
+    
+    Raises:
+    ValueError: If the derivative is zero during the iteration.
+    &quot;&quot;&quot;
+    x_n = x0
+    for n in range(max_iter):
+        f_xn = func.evaluate(x_n)
+        f_prime_xn = func.diferentiate_eval(x_n)
+        
+        if f_prime_xn == 0:
+            raise ValueError(&quot;Derivative is zero. No solution found.&quot;)
+        
+        x_n1 = x_n - f_xn / f_prime_xn
+        
+        if abs(x_n1 - x_n) &lt; tol:
+            return x_n1
+        
+        if procedure is not None:
+            procedure.append(f&quot;Iter {n+1}: x_n = {x_n}, f(x_n) = {f_xn}, f&#x27;(x_n) = {f_prime_xn}, x_n1 = {x_n1}\n&quot;)
+        
+        x_n = x_n1
+    
+    raise ValueError(&quot;Maximum iterations reached. No solution found.&quot;)
+
+</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="file-section" id="SolverOne_main_py">
+        <div class="file-header">📄 main.py</div>
+        <div class="file-path">SolverOne\main.py (28 líneas)</div>
+        <div class="code-block">
+            <div class="code-with-lines">
+                <div class="line-numbers">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28</div>
+                <div class="code-main">&#x27;&#x27;&#x27;
+The script that runs the application
+&#x27;&#x27;&#x27;
+import customtkinter as ctk
+from panels import prompt
+
+from logic.biseccion.function import FunctionMediator
+from panels import basic
+
+ctk.set_appearance_mode(&quot;dark&quot;)
+ctk.set_default_color_theme(&quot;dark-blue&quot;)
+
+if(__name__ == &quot;__main__&quot;):
+    # pending move this in a specific file class
+    mediator = FunctionMediator()
+    mediator.set_function(prompt.Function(&quot;x**2&quot;))
+    
+    app = ctk.CTk()
+    app.minsize(600, 400)
+    app.title(&quot;CustomTkinter Button Example&quot;)
+
+    basic.center_window(app, 800, 600)
+
+    prompt_panel = prompt.PromptPanel(app, mediator)
+    prompt_panel.pack(fill=&quot;both&quot;, expand=True)
+
+    app.mainloop()
+</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="file-section" id="SolverOne_panels_basic_py">
+        <div class="file-header">📄 basic.py</div>
+        <div class="file-path">SolverOne\panels\basic.py (16 líneas)</div>
+        <div class="code-block">
+            <div class="code-with-lines">
+                <div class="line-numbers">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16</div>
+                <div class="code-main">import customtkinter as ctk
+
+from PIL import Image, ImageTk
+
+def add_image_to_button(button: ctk.CTkButton, image_path: str, size: tuple[int, int] = (24, 24)):
+    image = Image.open(image_path)
+
+    photo_image = ctk.CTkImage(light_image=image, dark_image=image, size=size)
+
+    button.configure(image=photo_image)
+
+def center_window(window, width, height):
+    window.update_idletasks()
+    x = (window.winfo_screenwidth() // 2) - (width // 2)
+    y = (window.winfo_screenheight() // 2) - (height // 2)
+    window.geometry(f&quot;{width}x{height}+{x}+{y}&quot;)</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="file-section" id="SolverOne_panels_color_picker_py">
+        <div class="file-header">📄 color_picker.py</div>
+        <div class="file-path">SolverOne\panels\color_picker.py (64 líneas)</div>
+        <div class="code-block">
+            <div class="code-with-lines">
+                <div class="line-numbers">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64</div>
+                <div class="code-main">import customtkinter as ctk
+from panels.basic import center_window
+
+class ColorPickerDialog(ctk.CTkToplevel):
+    def __init__(self, parent, initial_color=&quot;#ffffff&quot;):
+        super().__init__(parent)
+        self.title(&quot;Seleccionar color&quot;)
+        self.geometry(&quot;300x300&quot;)
+        self.minsize(300, 300)
+        self.transient(parent)
+        self.grab_set()  # Modal
+
+        self.result = None
+
+        # Convertir color inicial a RGB
+        self.r = ctk.IntVar(value=int(initial_color[1:3], 16))
+        self.g = ctk.IntVar(value=int(initial_color[3:5], 16))
+        self.b = ctk.IntVar(value=int(initial_color[5:7], 16))
+
+        # Sliders
+        ctk.CTkLabel(self, text=&quot;Rojo&quot;).pack()
+        ctk.CTkSlider(self, from_=0, to=255, variable=self.r, command=self.update_color).pack(fill=&quot;x&quot;)
+        ctk.CTkLabel(self, text=&quot;Verde&quot;).pack()
+        ctk.CTkSlider(self, from_=0, to=255, variable=self.g, command=self.update_color).pack(fill=&quot;x&quot;)
+        ctk.CTkLabel(self, text=&quot;Azul&quot;).pack()
+        ctk.CTkSlider(self, from_=0, to=255, variable=self.b, command=self.update_color).pack(fill=&quot;x&quot;)
+
+        # Preview
+        self.preview = ctk.CTkLabel(self, text=&quot;&quot;, width=100, height=40, corner_radius=8)
+        self.tag_color = ctk.CTkLabel(self, text=&quot;#&quot;)
+
+        self.preview.pack(pady=10)
+        self.tag_color.pack()
+        self.update_color()
+
+        # Buttons
+        btn_frame = ctk.CTkFrame(self)
+        btn_frame.pack(pady=10)
+        ctk.CTkButton(btn_frame, text=&quot;Aceptar&quot;, command=self.on_accept).pack(side=&quot;left&quot;, padx=5, fill=&quot;y&quot;)
+        ctk.CTkButton(btn_frame, text=&quot;Cancelar&quot;, command=self.on_cancel).pack(side=&quot;left&quot;, padx=5, fill=&quot;y&quot;)
+
+        self.protocol(&quot;WM_DELETE_WINDOW&quot;, self.on_cancel)
+
+    def update_color(self, *args):
+        color = f&quot;#{self.r.get():02x}{self.g.get():02x}{self.b.get():02x}&quot;
+        self.preview.configure(fg_color=color)
+        self.tag_color.configure(text=color)
+
+    def on_accept(self):
+        self.result = f&quot;#{self.r.get():02x}{self.g.get():02x}{self.b.get():02x}&quot;
+        self.grab_release()
+        self.destroy()
+
+    def on_cancel(self):
+        self.result = None
+        self.grab_release()
+        self.destroy()
+
+def ask_color(parent, initial_color=&quot;#ffffff&quot;):
+    dialog = ColorPickerDialog(parent, initial_color)
+    center_window(dialog, 300, 300)
+    parent.wait_window(dialog)
+    return dialog.result
+</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="file-section" id="SolverOne_panels_const_py">
+        <div class="file-header">📄 const.py</div>
+        <div class="file-path">SolverOne\panels\const.py (33 líneas)</div>
+        <div class="code-block">
+            <div class="code-with-lines">
+                <div class="line-numbers">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33</div>
+                <div class="code-main"># -*- coding: utf-8 -*-
+from customtkinter import CTkFont
+
+# Font family constants
+
+DEFAULT_FONT_FAMILY = None
+PRIVATIVE_FONT_FAMILY = &quot;Plus Jakarta Sans&quot;
+
+# Font size constants
+TITLE_SIZE = 48
+SUBTITLE_SIZE = 24
+TEXT_SIZE = 14
+SMALL_TEXT_SIZE = 12
+BTN_TEXT_SIZE = 18
+
+# theme constants for customtkinter
+SYSTEM_THEME = &quot;system&quot;
+DARK_THEME = &quot;dark&quot;
+LIGHT_THEME = &quot;light&quot;
+
+BLUE_COLOR_THEME = &quot;blue&quot;
+GREEN_COLOR_THEME = &quot;green&quot;
+DARK_BLUE_COLOR_THEME = &quot;dark-blue&quot;
+
+DEFAULT_THEME = DARK_THEME
+DEFAULT_COLOR_THEME = DARK_BLUE_COLOR_THEME
+
+# style fonts
+BOLD = &quot;bold&quot;
+ITALIC = &quot;italic&quot;
+UNDERLINE = &quot;underline&quot;
+NORMAL = &quot;normal&quot;
+</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="file-section" id="SolverOne_panels_custom_range_dialog_py">
+        <div class="file-header">📄 custom_range_dialog.py</div>
+        <div class="file-path">SolverOne\panels\custom_range_dialog.py (162 líneas)</div>
+        <div class="code-block">
+            <div class="code-with-lines">
+                <div class="line-numbers">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162</div>
+                <div class="code-main">import customtkinter as ctk
+from tkinter import messagebox
+
+class DialogoNumeros(ctk.CTkToplevel):
+    def __init__(self, parent):
+        super().__init__(parent)
+        self.parent = parent
+        
+        # Configuración de la ventana
+        self.title(&quot;Ingresar Números&quot;)
+        self.geometry(&quot;300x350&quot;)
+        self.resizable(False, False)
+        
+        # Hacer la ventana modal
+        self.transient(parent)
+        self.grab_set()
+        
+        # Variables para almacenar los valores
+        self.numero1 = None
+        self.numero2 = None
+        self.resultado = None
+        
+        # Centrar la ventana respecto a la ventana padre
+        self.center_window()
+        
+        # Crear widgets
+        self.crear_widgets()
+        
+        # Esperar a que la ventana se cierre
+        self.wait_window(self)
+    
+    def center_window(self):
+        &quot;&quot;&quot;Centra la ventana respecto a la ventana padre&quot;&quot;&quot;
+        self.update_idletasks()
+        width = self.winfo_width()
+        height = self.winfo_height()
+        x = self.parent.winfo_x() + (self.parent.winfo_width() // 2) - (width // 2)
+        y = self.parent.winfo_y() + (self.parent.winfo_height() // 2) - (height // 2)
+        self.geometry(f&quot;+{x}+{y}&quot;)
+    
+    def crear_widgets(self):
+        &quot;&quot;&quot;Crea los widgets de la interfaz&quot;&quot;&quot;
+        # Frame principal
+        frame = ctk.CTkFrame(self)
+        frame.pack(padx=20, pady=20, fill=&quot;both&quot;, expand=True)
+        
+        # Título
+        titulo = ctk.CTkLabel(frame, text=&quot;Ingrese dos números&quot;, 
+                             font=ctk.CTkFont(size=16, weight=&quot;bold&quot;))
+        titulo.pack(pady=(10, 20))
+        
+        # Entrada para el primer número
+        lbl_numero1 = ctk.CTkLabel(frame, text=&quot;Primer número:&quot;)
+        lbl_numero1.pack(anchor=&quot;w&quot;, padx=10)
+        
+        self.entry_numero1 = ctk.CTkEntry(frame, placeholder_text=&quot;Ingrese el primer número&quot;)
+        self.entry_numero1.pack(fill=&quot;x&quot;, padx=10, pady=(0, 10))
+        
+        # Entrada para el segundo número
+        lbl_numero2 = ctk.CTkLabel(frame, text=&quot;Segundo número:&quot;)
+        lbl_numero2.pack(anchor=&quot;w&quot;, padx=10)
+        
+        self.entry_numero2 = ctk.CTkEntry(frame, placeholder_text=&quot;Ingrese el segundo número&quot;)
+        self.entry_numero2.pack(fill=&quot;x&quot;, padx=10, pady=(0, 20))
+        
+        # Frame para los botones
+        frame_botones = ctk.CTkFrame(frame, fg_color=&quot;transparent&quot;)
+        frame_botones.pack(fill=&quot;x&quot;, padx=10, pady=10)
+        
+        # Botón Aceptar
+        btn_aceptar = ctk.CTkButton(frame_botones, text=&quot;Aceptar&quot;, 
+                                   command=self.aceptar)
+        btn_aceptar.pack(side=&quot;right&quot;, padx=(10, 0))
+        
+        # Botón Cancelar
+        btn_cancelar = ctk.CTkButton(frame_botones, text=&quot;Cancelar&quot;, 
+                                    command=self.cancelar, 
+                                    fg_color=&quot;transparent&quot;, 
+                                    border_width=1)
+        btn_cancelar.pack(side=&quot;right&quot;)
+        
+        # Bind Enter key para aceptar
+        self.bind(&#x27;&lt;Return&gt;&#x27;, lambda e: self.aceptar())
+        self.bind(&#x27;&lt;Escape&gt;&#x27;, lambda e: self.cancelar())
+        
+        # Focus en el primer campo
+        self.after(100, self.entry_numero1.focus)
+    
+    def validar_numeros(self):
+        &quot;&quot;&quot;Valida que los campos contengan números válidos&quot;&quot;&quot;
+        try:
+            num1 = float(self.entry_numero1.get())
+            num2 = float(self.entry_numero2.get())
+            return num1, num2
+        except ValueError:
+            messagebox.showerror(&quot;Error&quot;, &quot;Por favor ingrese números válidos&quot;)
+            return None, None
+    
+    def aceptar(self):
+        &quot;&quot;&quot;Maneja el evento del botón Aceptar&quot;&quot;&quot;
+        num1, num2 = self.validar_numeros()
+        
+        if num1 is not None and num2 is not None:
+            self.numero1 = num1
+            self.numero2 = num2
+            self.resultado = (num1, num2)
+            self.destroy()
+    
+    def cancelar(self):
+        &quot;&quot;&quot;Maneja el evento del botón Cancelar&quot;&quot;&quot;
+        self.resultado = None
+        self.destroy()
+    
+    def obtener_valores(self):
+        &quot;&quot;&quot;Retorna los valores ingresados por el usuario&quot;&quot;&quot;
+        return self.resultado
+
+
+# Ejemplo de uso
+class AplicacionPrincipal(ctk.CTk):
+    def __init__(self):
+        super().__init__()
+        
+        self.title(&quot;Aplicación Principal&quot;)
+        self.geometry(&quot;400x300&quot;)
+        
+        # Crear widgets de la aplicación principal
+        self.crear_widgets()
+    
+    def crear_widgets(self):
+        &quot;&quot;&quot;Crea los widgets de la aplicación principal&quot;&quot;&quot;
+        frame = ctk.CTkFrame(self)
+        frame.pack(expand=True, fill=&quot;both&quot;, padx=20, pady=20)
+        
+        titulo = ctk.CTkLabel(frame, text=&quot;Aplicación Principal&quot;, 
+                             font=ctk.CTkFont(size=18, weight=&quot;bold&quot;))
+        titulo.pack(pady=20)
+        
+        self.btn_abrir_dialogo = ctk.CTkButton(frame, text=&quot;Abrir Diálogo de Números&quot;, 
+                                              command=self.abrir_dialogo)
+        self.btn_abrir_dialogo.pack(pady=10)
+        
+        self.lbl_resultado = ctk.CTkLabel(frame, text=&quot;Resultado: Esperando entrada...&quot;, 
+                                         font=ctk.CTkFont(size=14))
+        self.lbl_resultado.pack(pady=20)
+    
+    def abrir_dialogo(self):
+        &quot;&quot;&quot;Abre el diálogo modal y obtiene los resultados&quot;&quot;&quot;
+        dialogo = DialogoNumeros(self)
+        resultado = dialogo.obtener_valores()
+        
+        if resultado:
+            num1, num2 = resultado
+            self.lbl_resultado.configure(
+                text=f&quot;Resultado: Número 1 = {num1}, Número 2 = {num2}&quot;
+            )
+            # Aquí puedes usar los números como necesites
+            print(f&quot;Números ingresados: {num1}, {num2}&quot;)
+        else:
+            self.lbl_resultado.configure(text=&quot;Resultado: Operación cancelada&quot;)
+            print(&quot;El usuario canceló la operación&quot;)
+</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="file-section" id="SolverOne_panels_graph_py">
+        <div class="file-header">📄 graph.py</div>
+        <div class="file-path">SolverOne\panels\graph.py (383 líneas)</div>
+        <div class="code-block">
+            <div class="code-with-lines">
+                <div class="line-numbers">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204
+205
+206
+207
+208
+209
+210
+211
+212
+213
+214
+215
+216
+217
+218
+219
+220
+221
+222
+223
+224
+225
+226
+227
+228
+229
+230
+231
+232
+233
+234
+235
+236
+237
+238
+239
+240
+241
+242
+243
+244
+245
+246
+247
+248
+249
+250
+251
+252
+253
+254
+255
+256
+257
+258
+259
+260
+261
+262
+263
+264
+265
+266
+267
+268
+269
+270
+271
+272
+273
+274
+275
+276
+277
+278
+279
+280
+281
+282
+283
+284
+285
+286
+287
+288
+289
+290
+291
+292
+293
+294
+295
+296
+297
+298
+299
+300
+301
+302
+303
+304
+305
+306
+307
+308
+309
+310
+311
+312
+313
+314
+315
+316
+317
+318
+319
+320
+321
+322
+323
+324
+325
+326
+327
+328
+329
+330
+331
+332
+333
+334
+335
+336
+337
+338
+339
+340
+341
+342
+343
+344
+345
+346
+347
+348
+349
+350
+351
+352
+353
+354
+355
+356
+357
+358
+359
+360
+361
+362
+363
+364
+365
+366
+367
+368
+369
+370
+371
+372
+373
+374
+375
+376
+377
+378
+379
+380
+381
+382
+383</div>
+                <div class="code-main">import customtkinter as ctk
+
+from logic.biseccion.function import FunctionMediator, FunctionObserver
+from panels.color_picker import ask_color
+from panels.basic import add_image_to_button
+
+import random
+import os
+
+### Panels for graphing functions ###
+class GraphControls(ctk.CTkFrame, FunctionObserver):
+    def __init__(self, master, mediator: FunctionMediator, **kwargs):
+        &#x27;&#x27;&#x27; Constructor&#x27;&#x27;&#x27;
+        super().__init__(master, **kwargs)
+        self.mediator : FunctionMediator = mediator
+        self.mediator.register(self)
+        self.master = master
+
+        self.graph_panel = None
+
+        self._config()
+        self._define_widgets()
+
+        self.bind(&quot;&lt;Destroy&gt;&quot;, lambda e: self.destructor())
+
+    def destructor(self):
+        &#x27;&#x27;&#x27; Destructor&#x27;&#x27;&#x27;
+        self.mediator.remove_observer(self)
+
+    # Setters
+    def set_graph_panel(self, graph_panel):
+        self.graph_panel = graph_panel
+
+    # Getters
+    def get_graph_panel(self):
+        return self.graph_panel
+
+    # Events
+    def zoom_in(self):
+        if self.graph_panel is not None:
+            current_scale = self.graph_panel.get_scale()
+            new_scale = current_scale + 5
+
+            if new_scale &gt; 1000:
+                new_scale = 1000
+
+            self.graph_panel.set_scale(new_scale)
+            self.graph_panel.paint_graph()
+
+    def zoom_out(self):
+        if self.graph_panel is not None:
+            current_scale = self.graph_panel.get_scale()
+            new_scale = current_scale - 5
+
+            if new_scale &lt; 1:
+                new_scale = 1
+
+            self.graph_panel.set_scale(new_scale)
+            self.graph_panel.paint_graph()
+
+    def move_left(self):
+        if self.graph_panel is not None:
+            current_center = self.graph_panel.get_center()
+            new_center = (current_center[0] + 10, current_center[1])
+            self.graph_panel.set_center(new_center)
+            self.graph_panel.paint_graph()
+
+    def move_right(self):
+        if self.graph_panel is not None:
+            current_center = self.graph_panel.get_center()
+            new_center = (current_center[0] - 10, current_center[1])
+            self.graph_panel.set_center(new_center)
+            self.graph_panel.paint_graph()
+
+    def move_up(self):
+        if self.graph_panel is not None:
+            current_center = self.graph_panel.get_center()
+            new_center = (current_center[0], current_center[1] + 10)
+            self.graph_panel.set_center(new_center)
+            self.graph_panel.paint_graph()
+
+    def move_down(self):
+        if self.graph_panel is not None:
+            current_center = self.graph_panel.get_center()
+            new_center = (current_center[0], current_center[1] - 10)
+            self.graph_panel.set_center(new_center)
+            self.graph_panel.paint_graph()
+
+    def goto_center(self):
+        if self.graph_panel is not None:
+            self.graph_panel.recalculate_center()
+            self.graph_panel.paint_graph()
+
+    def change_color(self):
+        new_color = ask_color(self.master, self.graph_panel.get_function_color() if self.graph_panel is not None else &quot;#005eff&quot;)
+
+        if new_color is not None and self.graph_panel is not None:
+            self.graph_panel.set_function_color(new_color)
+            self.graph_panel.paint_graph()
+
+    # Private methods
+    def _define_widgets(self):
+        self.HEIGHT_BUTTON = 40
+
+        self._add_zoom_buttons()
+        self._add_color_paint_button()
+
+        self._add_move_buttons()
+
+    def _add_zoom_buttons(self):
+        self.zoom_in_button = ctk.CTkButton(self, text=&quot;&quot;, command=self.zoom_in, height=self.HEIGHT_BUTTON)
+        self.zoom_in_button.grid(row=0, column=0, padx=5, pady=5, sticky=&quot;nsew&quot;, )
+        add_image_to_button(self.zoom_in_button, os.path.abspath(
+            os.path.join(os.path.dirname(__file__), &quot;..&quot;, &quot;sources&quot;, &quot;img&quot;, &quot;zoom_in_40p.png&quot;)
+        ), (40,40))
+
+        self.zoom_out_button = ctk.CTkButton(self, text=&quot;&quot;, command=self.zoom_out)
+        self.zoom_out_button.grid(row=0, column=1, padx=5, pady=5, sticky=&quot;nsew&quot;, )
+        add_image_to_button(self.zoom_out_button, os.path.abspath(
+            os.path.join(os.path.dirname(__file__), &quot;..&quot;, &quot;sources&quot;, &quot;img&quot;, &quot;zoom_out_40p.png&quot;)
+        ), (40,40))
+
+    def _add_move_buttons(self):
+        self.move_left_button = ctk.CTkButton(self, text=&quot;&quot;, command=self.move_left)
+        self.move_left_button.grid(row=0, column=5, padx=5, pady=5, sticky=&quot;nsew&quot;, )
+        add_image_to_button(self.move_left_button, os.path.abspath(
+            os.path.join(os.path.dirname(__file__), &quot;..&quot;, &quot;sources&quot;, &quot;img&quot;, &quot;left.png&quot;)
+        ), (40,40))
+
+        self.move_right_button = ctk.CTkButton(self, text=&quot;&quot;, command=self.move_right)
+        self.move_right_button.grid(row=0, column=6, padx=5, pady=5, sticky=&quot;nsew&quot;, )
+        add_image_to_button(self.move_right_button, os.path.abspath(
+            os.path.join(os.path.dirname(__file__), &quot;..&quot;, &quot;sources&quot;, &quot;img&quot;, &quot;right.png&quot;)
+        ), (40,40))
+
+        self.move_up_button = ctk.CTkButton(self, text=&quot;&quot;, command=self.move_up)
+        self.move_up_button.grid(row=0, column=7, padx=5, pady=5, sticky=&quot;nsew&quot;, )
+        add_image_to_button(self.move_up_button, os.path.abspath(
+            os.path.join(os.path.dirname(__file__), &quot;..&quot;, &quot;sources&quot;, &quot;img&quot;, &quot;up.png&quot;)
+        ), (40,40))
+
+        self.move_down_button = ctk.CTkButton(self, text=&quot;&quot;, command=self.move_down)
+        self.move_down_button.grid(row=0, column=8, padx=5, pady=5, sticky=&quot;nsew&quot;, )
+        add_image_to_button(self.move_down_button, os.path.abspath(
+            os.path.join(os.path.dirname(__file__), &quot;..&quot;, &quot;sources&quot;, &quot;img&quot;, &quot;down.png&quot;)
+        ), (40,40))
+
+        self.center_button = ctk.CTkButton(self, text=&quot;&quot;, command=self.goto_center)
+        self.center_button.grid(row=0, column=10, padx=5, pady=5, sticky=&quot;nsew&quot;, )
+        add_image_to_button(self.center_button, os.path.abspath(
+            os.path.join(os.path.dirname(__file__), &quot;..&quot;, &quot;sources&quot;, &quot;img&quot;, &quot;center_focus.png&quot;)
+        ), (40,40))
+
+    def _add_color_paint_button(self):
+        self.paint_button = ctk.CTkButton(self, text=&quot;&quot;, command=self.change_color)
+        self.paint_button.grid(row=0, column=3, padx=5, pady=5, sticky=&quot;nsew&quot;, )
+        add_image_to_button(self.paint_button, os.path.abspath(
+            os.path.join(os.path.dirname(__file__), &quot;..&quot;, &quot;sources&quot;, &quot;img&quot;, &quot;palette_40p.png&quot;)
+        ), (40,40))
+
+    def _config(self):
+        self._config_grid()
+        self.configure(fg_color=&quot;#212121&quot;)
+
+    def _config_grid(self):
+        &#x27;&#x27;&#x27; 
+        Configures the grid layout of the panel 
+        
+        Example layout:
+        +---+---+---+---+---+---+---+---+---+---+---+
+        |   |   |   |   |   |   |   |   |   |   |   |
+        +---+---+---+---+---+---+---+---+---+---+---+
+        is a grid with 1 row and 11 columns
+        &#x27;&#x27;&#x27;
+        # config the only row
+        self.grid_rowconfigure(0, weight=1)
+
+        # config the columns
+        self.grid_columnconfigure((0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10), weight=1)
+
+    # Interface methods
+    def update(self, function):
+        pass
+
+class GraphPanel(ctk.CTkFrame, FunctionObserver):
+    def __init__(self, master, mediator : FunctionMediator, function_color = &quot;#005eff&quot;, scale=30, **kwargs):
+        &#x27;&#x27;&#x27; Constructor&#x27;&#x27;&#x27;
+        super().__init__(master, **kwargs)
+        self.mediator : FunctionMediator = mediator
+        self.function_color = function_color
+        self.scale = scale
+
+        self.center = (0, 0)
+
+        self.mediator.register(self)
+        self._define_canvas()
+
+        self.bind(&quot;&lt;Destroy&gt;&quot;, lambda e: self.destructor())
+
+    def destructor(self):
+        &#x27;&#x27;&#x27; Destructor&#x27;&#x27;&#x27;
+        self.mediator.remove_observer(self)
+
+    # Getters
+    def recalculate_center(self):
+        width = self.canvas.winfo_width()
+        height = self.canvas.winfo_height()
+
+        self.center = (width // 2, height // 2)
+        return self.center
+
+    def get_center(self):
+        return self.center
+    
+    def get_function_color(self):
+        return self.function_color
+    
+    def get_scale(self):
+        return self.scale
+    
+    def get_canvas(self):
+        return self.canvas
+
+    # Setters
+    def set_random_function_color(self):
+        r = lambda: random.randint(0,255)
+        self.function_color = f&#x27;#{r():02x}{r():02x}{r():02x}&#x27;
+    
+    def set_function_color(self, color: str):
+        self.function_color = color
+
+    def set_scale(self, scale: int):
+        self.scale = scale
+
+    def set_center(self, center: tuple):
+        self.center = center
+    
+
+    # Private methods
+    def _define_canvas(self):
+        self.canvas = ctk.CTkCanvas(self, bg=&quot;#212121&quot;, highlightthickness=0)
+        self.canvas.pack(fill=&quot;both&quot;, expand=True)
+
+    # Graphing methods
+    def paint_graph(self):
+        &#x27;&#x27;&#x27; Draw all components of the graph in the canvas &#x27;&#x27;&#x27;
+        self.clear_canvas()
+
+        self.get_center()
+        self.draw_grid()
+        self.draw_mini_grid()
+        self.draw_ejes()
+        self.place_x_scale_num()
+        self.place_y_scale_num()
+
+        self.draw_function()
+
+    def place_x_scale_num(self):
+        &#x27;&#x27;&#x27; Place the scale numbers on the X axis &#x27;&#x27;&#x27;
+        width = self.canvas.winfo_width()
+        height = self.canvas.winfo_height()
+
+        for x in range(0, width, self.scale):
+            coord_x = (x - self.center[0]) / self.scale
+            if coord_x != 0:
+                self.canvas.create_text(x, self.center[1] + 10, text=f&quot;{coord_x:.1f}&quot;, fill=&quot;#ffffff&quot;, font=(&quot;Arial&quot;, 10))
+        
+        for x in range(width, 0, -self.scale):
+            coord_x = (x - self.center[0]) / self.scale
+            if coord_x != 0:
+                self.canvas.create_text(x, self.center[1] + 10, text=f&quot;{coord_x:.1f}&quot;, fill=&quot;#ffffff&quot;, font=(&quot;Arial&quot;, 10))
+
+    def place_y_scale_num(self):
+        &#x27;&#x27;&#x27; Place the scale numbers on the Y axis &#x27;&#x27;&#x27;
+        width = self.canvas.winfo_width()
+        height = self.canvas.winfo_height()
+
+        for y in range(0, height, self.scale):
+            coord_y = (self.center[1] - y) / self.scale
+            if coord_y != 0:
+                self.canvas.create_text(self.center[0] + 15, y, text=f&quot;{coord_y:.1f}&quot;, fill=&quot;#ffffff&quot;, font=(&quot;Arial&quot;, 10))
+        
+        for y in range(height, 0, -self.scale):
+            coord_y = (self.center[1] - y) / self.scale
+            if coord_y != 0:
+                self.canvas.create_text(self.center[0] + 15, y, text=f&quot;{coord_y:.1f}&quot;, fill=&quot;#ffffff&quot;, font=(&quot;Arial&quot;, 10))
+
+    def draw_mini_grid(self):
+        &#x27;&#x27;&#x27; Draw the mini grid in the canvas if the scale is big enough &#x27;&#x27;&#x27;
+        width = self.canvas.winfo_width()
+        height = self.canvas.winfo_height()
+
+        if self.scale &lt; 10:  # Only draw mini grid if scale is small enough
+            # Vertical lines
+            for x in range(0, width, self.scale // 5):
+                self.canvas.create_line(x, 0, x, height, fill=&quot;#333333&quot;)
+        
+            # Horizontal lines
+            for y in range(0, height, self.scale // 5):
+                self.canvas.create_line(0, y, width, y, fill=&quot;#333333&quot;)
+
+    def draw_grid(self):
+        &#x27;&#x27;&#x27; Draw the grid in the canvas &#x27;&#x27;&#x27;
+        width = self.canvas.winfo_width()
+        height = self.canvas.winfo_height()
+
+        # Vertical lines
+        for x in range(0, width, self.scale):
+            self.canvas.create_line(x, 0, x, height, fill=&quot;#444444&quot;)
+            
+        # Horizontal lines
+        for y in range(0, height, self.scale):
+            self.canvas.create_line(0, y, width, y, fill=&quot;#444444&quot;)
+
+    def draw_ejes(self):
+        &#x27;&#x27;&#x27; Draw the X and Y axes in the canvas &#x27;&#x27;&#x27;
+        self.canvas.create_line(0, self.center[1], self.canvas.winfo_width(), self.center[1], fill=&quot;#a6072c&quot;, width=3)   # Eje X
+        self.canvas.create_line(self.center[0], 0, self.center[0], self.canvas.winfo_height(), fill=&quot;#2c730b&quot;, width=3)  # Eje Y
+
+    def clear_canvas(self):
+        &#x27;&#x27;&#x27; Clear all drawings in the canvas &#x27;&#x27;&#x27;
+        self.canvas.delete(&quot;all&quot;)
+
+    def draw_function(self):
+        func = self.mediator.function
+
+        width = self.canvas.winfo_width()
+        height = self.canvas.winfo_height()
+
+        prev_x = None
+        prev_y = None
+
+        for pixel_x in range(0, width):
+            x = (pixel_x - self.center[0]) / self.scale  # Convertir coordenada de píxel a coordenada matemática
+            try:
+                y = func.evaluate(x)  # Evaluar la función en x
+                pixel_y = self.center[1] - (y * self.scale)  # Convertir coordenada matemática a coordenada de píxel
+
+                if prev_x is not None and prev_y is not None:
+                    self.canvas.create_line(prev_x, prev_y, pixel_x, pixel_y, fill=self.function_color, width=3)  # Dibujar línea entre puntos
+
+                prev_x = pixel_x
+                prev_y = pixel_y
+                
+            except Exception as e:
+                # Si hay un error al evaluar la función, simplemente saltar ese punto
+                prev_x = None
+                prev_y = None
+
+    # Interface methods
+    def update(self, function):
+        self.paint_graph()
+
+
+### Window for graphing functions ###
+class GraphDialog(ctk.CTkToplevel):
+    def __init__(self, master, mediator: FunctionMediator, **kwargs):
+        super().__init__(master, **kwargs)
+
+        self.mediator : FunctionMediator = mediator
+        
+        self._config()
+        self._define_widgets()
+
+    def _define_widgets(self):
+        self.graphPanel : GraphPanel = GraphPanel(self, self.mediator)
+        self.graphPanel.pack(fill=&quot;both&quot;, expand=True)
+        self.graphPanel.set_random_function_color()
+
+        self.graphControls : GraphControls = GraphControls(self, self.mediator, height=100)
+        self.graphControls.pack(fill=&quot;x&quot;)
+        self.graphControls.set_graph_panel(self.graphPanel)
+
+    def _config(self):
+        self.title(&quot;Graph Dialog&quot;)
+        self.geometry(&quot;600x400&quot;)
+        self.minsize(400, 300)
+
+    def show(self):
+        self.graphPanel.get_canvas().bind(&quot;&lt;Configure&gt;&quot;, lambda ev: self.graphPanel.paint_graph())
+        self.graphPanel.recalculate_center()
+        self.graphPanel.paint_graph()
+</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="file-section" id="SolverOne_panels_modelSelection_py">
+        <div class="file-header">📄 modelSelection.py</div>
+        <div class="file-path">SolverOne\panels\modelSelection.py (138 líneas)</div>
+        <div class="code-block">
+            <div class="code-with-lines">
+                <div class="line-numbers">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138</div>
+                <div class="code-main">import os
+import customtkinter as ctk
+from abc import ABC, abstractmethod
+
+from panels.const import BOLD, SUBTITLE_SIZE, TITLE_SIZE
+from panels.basic import add_image_to_button
+
+### Name for methods ###
+#
+BISECCION = &quot;Biseccion&quot;
+
+# 
+NEWTON_RAPHSON = &quot;Newton-Raphson&quot;
+
+# This method resolve a function using
+# python libraries but the process is not
+# explained to the user
+PY_TOOL = &quot;Py Tool&quot;
+
+class Model():
+    def __init__(self, model : str = BISECCION):
+        self.model = model
+
+    def get_model(self) -&gt; str:
+        return self.model
+    
+    def set_model(self, model: str):
+        self.model = model
+
+    def __str__(self) -&gt; str:
+        return self.model
+    
+class ModelMediator:
+    def __init__(self):
+        self.model = Model()
+        self.observers = []
+
+    def set_model(self, model: str):
+        self.model.set_model(model)
+        self.notify_model_observers()
+
+    def get_model(self) -&gt; str:
+        return self.model.get_model()
+
+    def notify_model_observers(self):
+        for observer in self.observers:
+            observer.update(self.model)
+
+    def register(self, observer):
+        self.observers.append(observer)
+
+    def remove_model_observer(self, observer):
+        try:
+            self.observers.remove(observer)
+        except ValueError:
+            pass
+
+class ModelObserver(ABC):
+    @abstractmethod
+    def update(model: Model):
+        pass
+
+    @abstractmethod
+    def unregister(self, model: Model):
+        pass
+
+    @abstractmethod
+    def register(self, model: Model):
+        pass
+
+### 
+class ModelSelectionPanel(ctk.CTkToplevel):
+    def __init__(self, master, model_mediator: ModelMediator):
+        &#x27;&#x27;&#x27; Constructor &#x27;&#x27;&#x27;
+        super().__init__(master)
+        self.model_mediator : ModelMediator = model_mediator
+        self._add_widgets()
+
+    def update(self, model: Model):
+        pass
+
+    def unregister(self, model: Model):
+        self.bind(&quot;&lt;Destroy&gt;&quot;, lambda e: self.model_mediator.remove_model_observer(self))
+
+    def register(self, model: Model):
+        self.model_mediator.register(self)
+
+    def get_model(self) -&gt; str:
+        return self.model_mediator.get_model()
+
+    def _set_model(self, name: str):
+        self.model_mediator.set_model(name)
+        self.model_mediator.notify_model_observers()
+        self.destroy()
+    
+    def _add_widgets(self):
+        self.title_label = ctk.CTkLabel(self, text=&quot;Modelos&quot;, font=ctk.CTkFont(size=TITLE_SIZE, weight=BOLD))
+        self.title_label.pack(pady=10, padx=10)
+
+        self._add_buttons()
+
+    def _add_buttons(self):
+        model_name = self.model_mediator.get_model()
+
+        self.bisection_btn = ctk.CTkButton(
+            self, text=BISECCION, 
+            command=lambda: self._set_model(BISECCION), 
+            font=ctk.CTkFont(size=SUBTITLE_SIZE),
+            fg_color=&quot;transparent&quot; if model_name != BISECCION else &quot;#0b1253&quot;,
+            hover_color=&quot;#0b2f53&quot;,
+            corner_radius=20
+        )
+        self.bisection_btn.pack(pady=5, padx=10, fill=&quot;x&quot;)
+        
+
+        self.newton_raphson_btn = ctk.CTkButton(
+            self, text=NEWTON_RAPHSON, 
+            command=lambda: self._set_model(NEWTON_RAPHSON), 
+            font=ctk.CTkFont(size=SUBTITLE_SIZE),
+            fg_color=&quot;transparent&quot; if model_name != NEWTON_RAPHSON else &quot;#0b1253&quot;,
+            hover_color=&quot;#0b2f53&quot;,
+            corner_radius=20
+        )
+        self.newton_raphson_btn.pack(pady=5, padx=10, fill=&quot;x&quot;)
+
+        self.py_tool_btn = ctk.CTkButton(
+            self, text=PY_TOOL, 
+            command=lambda: self._set_model(PY_TOOL), 
+            font=ctk.CTkFont(size=SUBTITLE_SIZE),
+            fg_color=&quot;transparent&quot; if model_name != PY_TOOL else &quot;#0b1253&quot;,
+            hover_color=&quot;#534d0b&quot;,
+            corner_radius=20
+        )
+        add_image_to_button(self.py_tool_btn, os.path.abspath(
+            os.path.join(os.path.dirname(__file__), &quot;..&quot;, &quot;sources&quot;, &quot;img&quot;, &quot;premium.png&quot;)
+        ), (20,20))
+        self.py_tool_btn.pack(pady=5, padx=10, fill=&quot;x&quot;)
+</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="file-section" id="SolverOne_panels_prompt_py">
+        <div class="file-header">📄 prompt.py</div>
+        <div class="file-path">SolverOne\panels\prompt.py (287 líneas)</div>
+        <div class="code-block">
+            <div class="code-with-lines">
+                <div class="line-numbers">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204
+205
+206
+207
+208
+209
+210
+211
+212
+213
+214
+215
+216
+217
+218
+219
+220
+221
+222
+223
+224
+225
+226
+227
+228
+229
+230
+231
+232
+233
+234
+235
+236
+237
+238
+239
+240
+241
+242
+243
+244
+245
+246
+247
+248
+249
+250
+251
+252
+253
+254
+255
+256
+257
+258
+259
+260
+261
+262
+263
+264
+265
+266
+267
+268
+269
+270
+271
+272
+273
+274
+275
+276
+277
+278
+279
+280
+281
+282
+283
+284
+285
+286
+287</div>
+                <div class="code-main">&#x27;&#x27;&#x27;
+This module contains the PromptPanel class, which is a custom Tkinter frame
+for user input of mathematical functions. It includes an input area for the
+function expression and a button to submit the input.
+
+Design in Figma: https://www.figma.com/design/pDC9BuB5fXu5lWfgEwzTBh/BiseccionGrapInterface?node-id=0-1&amp;t=aKpFX2sonbDXfVj2-0
+&#x27;&#x27;&#x27;
+
+# Imports
+import customtkinter as ctk
+from tkinter import messagebox
+from panels import const
+from panels.graph import GraphDialog
+from panels.basic import add_image_to_button, center_window
+from panels.results import ResultsPanel
+from panels.modelSelection import ModelSelectionPanel, ModelMediator, ModelObserver
+
+from panels.custom_range_dialog import DialogoNumeros
+
+import os
+from PIL import Image
+
+from logic.biseccion.function import Function, FunctionMediator, FunctionObserver
+
+# Classes
+class PromptInputArea(ctk.CTkFrame):
+    &#x27;&#x27;&#x27; A frame containing an input field for the function expression &#x27;&#x27;&#x27;
+    def __init__(self, root, function_mediator: FunctionMediator, model_mediator : ModelMediator, **kwargs):
+        &#x27;&#x27;&#x27; Constructor &#x27;&#x27;&#x27;
+        super().__init__(root, **kwargs)
+        self.root = root
+        self.model_mediator = model_mediator
+        self.function_mediator = function_mediator
+        self._add_widgets()
+
+        # Other attributes here if needed
+
+    def _add_widgets(self):
+        &#x27;&#x27;&#x27; Adds and configures the widgets in the input area &#x27;&#x27;&#x27;
+        self._add_title()
+
+        # this is the input field for the function expression
+        # the style is very smilar to the style of ChatGPT input field
+        self.input_field = ctk.CTkEntry(self, 
+                                        placeholder_text=&quot;f(x) = &quot;, 
+                                        width=400,
+                                        height=40, 
+                                        font=ctk.CTkFont(size=const.SUBTITLE_SIZE, family=const.DEFAULT_FONT_FAMILY),
+                                        border_width=3, 
+                                        corner_radius=8
+                                        )
+        self.input_field.pack(pady=(0, 20), padx=20)
+        self.input_field.pack_propagate(False)
+        self.input_field.bind(&quot;&lt;KeyRelease&gt;&quot;, lambda e: self.on_input_change())
+
+        self._add_action_btns()
+
+    # Widgets representation methods
+    def _add_title(self):
+        # adding an icon to the title
+        img_path = os.path.join(os.path.dirname(__file__), &quot;..&quot;, &quot;sources&quot;, &quot;img&quot;, &quot;icon.ico&quot;)
+        img_path = os.path.abspath(img_path)
+        icon_img = ctk.CTkImage(light_image=Image.open(img_path), size=(40, 40))
+
+        # title label
+        self.label_title = ctk.CTkLabel(self, 
+                                        text=&quot;Problema&quot;, 
+                                        font=ctk.CTkFont(size=const.TITLE_SIZE, weight=const.BOLD, family=const.DEFAULT_FONT_FAMILY),
+                                        image=icon_img, 
+                                        compound=&quot;left&quot;,
+                                        )
+        self.label_title.pack(pady=(20, 10))
+
+    def _add_action_btns(self):
+        &#x27;&#x27;&#x27; Adds the resolve button to the input area &#x27;&#x27;&#x27;
+        # Icons for the buttons
+        img_path = os.path.join(os.path.dirname(__file__), &quot;..&quot;, &quot;sources&quot;, &quot;img&quot;, &quot;chart_24p.png&quot;)
+        img_path = os.path.abspath(img_path)
+        chart_icon = ctk.CTkImage(light_image=Image.open(img_path), size=(24, 24))
+
+        img_path = os.path.join(os.path.dirname(__file__), &quot;..&quot;, &quot;sources&quot;, &quot;img&quot;, &quot;calculate_24p.png&quot;)
+        img_path = os.path.abspath(img_path)
+        calculate_icon = ctk.CTkImage(light_image=Image.open(img_path), size=(24, 24))
+
+        # area for the buttons
+        self.btn_area = ctk.CTkFrame(self, 
+                                     fg_color=&quot;transparent&quot;, 
+                                     bg_color=&quot;transparent&quot;,
+                                     width=400,
+                                    )
+        self.btn_area.pack(pady=(0, 10))
+
+        # button for graphical representation of the function
+        self.graph_func_btn = ctk.CTkButton(self.btn_area, 
+                                     text=&quot;Graficar&quot;,
+                                     command=self.on_graph,
+                                     width=150,
+                                     height=40,
+                                     font=ctk.CTkFont(size=const.SUBTITLE_SIZE, family=const.DEFAULT_FONT_FAMILY),
+                                     image=chart_icon,
+                                     compound=&quot;left&quot;
+                                    )
+        self.graph_func_btn.pack(side=&quot;right&quot;, padx=10)
+
+        self.resolve_btn = ctk.CTkButton(self.btn_area, 
+                                         text=&quot;Resolver&quot;,
+                                         command=self.on_resolve,
+                                         width=150,
+                                         height=40,
+                                         font=ctk.CTkFont(size=const.SUBTITLE_SIZE, family=const.DEFAULT_FONT_FAMILY),
+                                         image=calculate_icon,
+                                         compound=&quot;left&quot;
+                                        )
+        self.resolve_btn.pack(side=&quot;left&quot;, padx=10)
+
+
+    ### events ###
+    def on_graph(self):
+        graph : GraphDialog = GraphDialog(self.root, self.function_mediator)
+        graph.show()
+        #graph.grab_set()
+        #self.root.wait_window(graph)
+
+    def on_resolve(self):
+        results_panel = ResultsPanel(self.root, self.function_mediator, self.model_mediator)
+        if self.root.custom_range is not None:
+            results_panel.set_custom_range(min=self.root.custom_range[0], max=self.root.custom_range[1])
+        results_panel.solver()
+        results_panel.show()
+        self.root.custom_range = None
+
+    def on_input_change(self):
+        &#x27;&#x27;&#x27; Event handler for input field changes &#x27;&#x27;&#x27;
+        new_expression = self.input_field.get()
+
+        try:
+            new_function = Function(new_expression)
+            self.function_mediator.set_function(new_function)
+        except Exception as e:
+            print(f&quot;Invalid function expression: {e}&quot;)
+            print(e.__traceback__)
+
+
+class PromptPanel(ctk.CTkFrame, FunctionObserver):
+    &#x27;&#x27;&#x27; 
+    A custom Tkinter frame for user input of mathematical functions.
+    This method implements the Mediator pattern to update the input field
+    and other components when the function changes.
+    &#x27;&#x27;&#x27;
+    def __init__(self, root, mediator: FunctionMediator, **kwargs):
+        super().__init__(root, **kwargs)
+        self.root = root
+        self.function_mediator: FunctionMediator = mediator
+        self.model_mediator : ModelMediator = ModelMediator()
+
+        self.custom_range : tuple[float, float] = None
+
+        self.function_mediator.register(self)
+
+        self._add_widgets()
+
+    # If you can&#x27;t understand this method, please read about the Mediator pattern
+    def update(self, function: Function):
+        pass
+
+    # Widgets representation methods
+    def _config_grid(self):
+        &#x27;&#x27;&#x27; 
+        Configures the grid layout of the panel 
+        
+        Example layout:
+        +---+---+---+---+---+
+        | B |   |   |   |   |
+        +---+---+---+---+---+
+        |   |   |   |   |   |
+        +---+---+---+---+---+
+        |   |   | I |   |   |
+        +---+---+---+---+---+
+        |   |   |   |   | R |
+        +---+---+---+---+---+
+        |   |   |   |   | H |
+        +---+---+---+---+---+
+
+        is a grid with 5 rows and 5 columns
+        &#x27;&#x27;&#x27;
+        # rows
+        self.grid_rowconfigure((0), weight=1)        # button here
+        self.grid_rowconfigure((1), weight=3)        # space here
+        self.grid_rowconfigure((2), weight=4)        # main area here
+        self.grid_rowconfigure((3), weight=3)        # space here
+        self.grid_rowconfigure((4), weight=1)        # button here
+
+        # columns
+        self.grid_columnconfigure((0, 1, 3, 4), weight=1)
+        self.grid_columnconfigure((2), weight=2)
+
+    def _add_widgets(self):
+        &#x27;&#x27;&#x27; Adds and configures the widgets in the panel &#x27;&#x27;&#x27;
+        self._config_grid()
+
+        # adding the input area ( I hate this, It was difficult )
+        self.prompt_input_area = PromptInputArea(self, function_mediator=self.function_mediator, model_mediator=self.model_mediator)
+        self.prompt_input_area.configure(width=600, height=400, fg_color=&quot;transparent&quot;)
+        self.prompt_input_area.grid(row=2, column=2, sticky=&quot;nsew&quot;)
+        self.prompt_input_area.grid_propagate(False)
+        self.prompt_input_area.update_idletasks()
+        self.prompt_input_area.grid(row=2, column=2)
+
+        # adding the buttons
+        self._add_menu_btn()
+        self._add_help_btn()
+        self._add_custom_range_button()
+
+        # If you need add more widgets, add them here
+        # . . .
+
+    def _open_custom_range_dialog(self):
+        dialog = DialogoNumeros(self)
+
+        temp_range = dialog.obtener_valores()
+
+        if temp_range is not None:
+            self.custom_range = temp_range
+
+    def _add_custom_range_button(self):
+        &#x27;&#x27;&#x27;
+        El boton abre un dialogo para que el usuario
+        defina un rango personalizado para la grafica
+        y lo guarda en self.custom_range
+        &#x27;&#x27;&#x27;
+
+        img_path = os.path.join(os.path.dirname(__file__), &quot;..&quot;, &quot;sources&quot;, &quot;img&quot;, &quot;range_40p.png&quot;)
+        img_path = os.path.abspath(img_path)
+        icon_img = ctk.CTkImage(light_image=Image.open(img_path), size=(40, 40))
+
+        self.custom_range_button = ctk.CTkButton(
+            self,
+            text=&quot;&quot;,
+            width=50,
+            height=50,
+            fg_color=&quot;transparent&quot;,
+            image=icon_img,
+            command=self._open_custom_range_dialog,
+        )
+        self.custom_range_button.grid(row=0, column=6, padx=10, pady=10, sticky=&quot;ne&quot;)
+
+    def _add_menu_btn(self):
+        &#x27;&#x27;&#x27; Adds the menu button to the panel &#x27;&#x27;&#x27;
+        # adding an icon to the button
+        img_path = os.path.join(os.path.dirname(__file__), &quot;..&quot;, &quot;sources&quot;, &quot;img&quot;, &quot;side_nav_40p.png&quot;)
+        img_path = os.path.abspath(img_path)
+        icon_img = ctk.CTkImage(light_image=Image.open(img_path), size=(40, 40))
+
+        self.menu_btn = ctk.CTkButton(self, 
+                                       text=&quot;&quot;,
+                                       command=lambda: self._show_select_model_panel(),
+                                       width=50,
+                                       height=50,
+                                       image=icon_img,
+                                       fg_color=&quot;transparent&quot;,
+                                       )
+        self.menu_btn.grid(row=0, column=0, padx=10, pady=10, sticky=&quot;nw&quot;)
+
+    def _add_help_btn(self):
+        &#x27;&#x27;&#x27; Adds the help button to the panel &#x27;&#x27;&#x27;
+        # adding an icon to the button
+        img_path = os.path.join(os.path.dirname(__file__), &quot;..&quot;, &quot;sources&quot;, &quot;img&quot;, &quot;help_50p.png&quot;)
+        img_path = os.path.abspath(img_path)
+        icon_img = ctk.CTkImage(light_image=Image.open(img_path), size=(40, 40))
+
+        self.help_btn = ctk.CTkButton(self, 
+                                       text=&quot;&quot;,
+                                       command=lambda: messagebox.showinfo(&quot;Info&quot;, &quot;Help button clicked!&quot;),
+                                       width=50,
+                                       height=50,
+                                       image=icon_img,
+                                       fg_color=&quot;transparent&quot;,
+                                       )
+        self.help_btn.grid(row=4, column=6, padx=10, pady=10, sticky=&quot;se&quot;)
+
+    ### events ###
+    def _show_select_model_panel(self):
+        self.model_selection_panel = ModelSelectionPanel(self, self.model_mediator)
+        self.model_selection_panel.grab_set()
+        center_window(self.model_selection_panel, 450, 300)
+        self.master.wait_window(self.model_selection_panel)
+</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="file-section" id="SolverOne_panels_results_py">
+        <div class="file-header">📄 results.py</div>
+        <div class="file-path">SolverOne\panels\results.py (327 líneas)</div>
+        <div class="code-block">
+            <div class="code-with-lines">
+                <div class="line-numbers">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204
+205
+206
+207
+208
+209
+210
+211
+212
+213
+214
+215
+216
+217
+218
+219
+220
+221
+222
+223
+224
+225
+226
+227
+228
+229
+230
+231
+232
+233
+234
+235
+236
+237
+238
+239
+240
+241
+242
+243
+244
+245
+246
+247
+248
+249
+250
+251
+252
+253
+254
+255
+256
+257
+258
+259
+260
+261
+262
+263
+264
+265
+266
+267
+268
+269
+270
+271
+272
+273
+274
+275
+276
+277
+278
+279
+280
+281
+282
+283
+284
+285
+286
+287
+288
+289
+290
+291
+292
+293
+294
+295
+296
+297
+298
+299
+300
+301
+302
+303
+304
+305
+306
+307
+308
+309
+310
+311
+312
+313
+314
+315
+316
+317
+318
+319
+320
+321
+322
+323
+324
+325
+326
+327</div>
+                <div class="code-main">import tkinter
+import customtkinter as ctk
+
+from panels.modelSelection import ModelMediator, ModelObserver, Model, BISECCION, NEWTON_RAPHSON, PY_TOOL
+from panels.const import *
+from panels.basic import add_image_to_button, center_window
+
+from logic.biseccion.function import Function, FunctionMediator, FunctionObserver
+import logic.biseccion.logic as lo
+from logic.newton_raphson.logic import newton_raphson_method
+from logic.newton_raphson.logic import ProcessReference
+
+import os
+
+class ResultsArea(ctk.CTkFrame, FunctionObserver, ModelObserver):
+    def __init__(self, master, function_mediator: FunctionMediator, model_mediator: ModelMediator, **kwargs):
+        &#x27;&#x27;&#x27; Constructor&#x27;&#x27;&#x27;
+        super().__init__(master, **kwargs)
+        self.function_mediator = function_mediator
+        self.model_mediator = model_mediator
+
+        self.function_mediator.register(self)
+        self.register(None)
+
+        self.elements : list[float] = function_mediator.function.get_real_roots()
+        self._config_grid()
+        self._add_widgets()
+
+        self.bind(&quot;&lt;Destroy&gt;&quot;, lambda e: self.destructor())
+
+    # widgets methods
+    def _add_widgets(self):
+        &#x27;&#x27;&#x27; Adds the widgets to the panel &#x27;&#x27;&#x27;
+        self._add_nav_buttons()
+        self._add_scroll_area()
+
+    def _add_nav_buttons(self):
+        &#x27;&#x27;&#x27; Left and right navigation buttons &#x27;&#x27;&#x27;
+        self.left_button = ctk.CTkButton(
+            self,
+            text=&quot;&lt;&quot;,
+            width=45,
+            height=45,
+            font=ctk.CTkFont(size=20, weight=BOLD),
+            command=lambda: self._scroll(-100)  # move left
+        )
+        self.left_button.grid(row=0, column=0, padx=5, pady=5, sticky=&quot;w&quot;)
+
+        self.right_button = ctk.CTkButton(
+            self,
+            text=&quot;&gt;&quot;,
+            width=45,
+            height=45,
+            font=ctk.CTkFont(size=20),
+            command=lambda: self._scroll(100)  # move right
+        )
+        self.right_button.grid(row=0, column=4, padx=5, pady=5, sticky=&quot;e&quot;)
+
+    def _add_scroll_area(self):
+        &#x27;&#x27;&#x27; Central frame with scrollable content &#x27;&#x27;&#x27;
+        self.scroll_frame = ctk.CTkScrollableFrame(self, orientation=&quot;horizontal&quot;, height=50)
+        self.scroll_frame.grid(row=0, column=1, columnspan=3, sticky=&quot;ew&quot;, padx=5, pady=5)
+
+        # get internal canvas
+        self.canvas = self.scroll_frame._parent_canvas
+        self.canvas.configure(scrollregion=self.canvas.bbox(&quot;all&quot;))
+
+        # Append elements
+        for i, el in enumerate(self.elements):
+            lbl = ctk.CTkLabel(
+                self.scroll_frame, 
+                text=f&quot;x{i} = {el}&quot;, 
+                width=150, 
+                height=40, 
+                fg_color=(&quot;#190CCE&quot;, &quot;#3A3A3A&quot;), 
+                bg_color=&quot;transparent&quot;,
+                corner_radius=8,
+                font=ctk.CTkFont(size=16, weight=BOLD)
+            )
+            lbl.grid(row=0, column=i, padx=10, pady=10)
+
+    def add_solutions(self):
+        # Append elements
+        for i, el in enumerate(self.elements):
+            lbl = ctk.CTkLabel(
+                self.scroll_frame, 
+                text=f&quot;x{i} = {el}&quot;, 
+                width=150, 
+                height=40, 
+                fg_color=(&quot;#190CCE&quot;, &quot;#3A3A3A&quot;), 
+                bg_color=&quot;transparent&quot;,
+                corner_radius=8,
+                font=ctk.CTkFont(size=16, weight=BOLD)
+            )
+
+    def _scroll(self, delta):
+        &quot;&quot;&quot; Scroll the canvas horizontally&quot;&quot;&quot;
+        self.canvas.xview_scroll(int(delta / 2), &quot;units&quot;)
+
+    def _update_widgets(self):
+        &#x27;&#x27;&#x27; Updates the displayed widgets with the new elements &#x27;&#x27;&#x27;
+        for widget in self.winfo_children():
+            widget.destroy()
+
+        self._add_widgets()
+
+    def _config_grid(self):
+        &#x27;&#x27;&#x27; 
+        Configures the grid layout of the panel 
+
+        +---+------+------+------+---+ 
+        |   |      |      |      |   | 
+        +---+------+------+------+---+ 
+        
+        is a grid with 1 row and 5 columns 
+        &#x27;&#x27;&#x27;
+
+        self.grid_rowconfigure(0, weight=1)
+        self.grid_columnconfigure(0, weight=0)
+        self.grid_columnconfigure((1, 2, 3), weight=1)
+        self.grid_columnconfigure(4, weight=0)
+
+    # Interface methods
+    def update(self, function: Function):
+        &#x27;&#x27;&#x27; Updates the results area when the function changes &#x27;&#x27;&#x27;
+        self.elements = function.get_real_roots()
+        self._update_widgets()
+
+    def destructor(self):
+        &#x27;&#x27;&#x27; Destructor&#x27;&#x27;&#x27;
+        self.function_mediator.remove_observer(self)
+        self.unregister(None)
+
+    def update(self, model: Model):
+        pass
+
+    def unregister(self, model: Model):
+        self.model_mediator.remove_model_observer(self)
+
+    def register(self, model: Model):
+        self.model_mediator.register(self)
+
+class ResultsPanel(ctk.CTkToplevel, FunctionObserver):
+    def __init__(self, master, function_mediator : FunctionMediator, model_mediator: ModelMediator, **kwargs):
+        &#x27;&#x27;&#x27; Contructor &#x27;&#x27;&#x27;
+        super().__init__(master, **kwargs)
+        self.function_mediator : FunctionMediator = function_mediator
+        self.model_mediator = model_mediator
+        self.custom_range : tuple[float, float] = None
+
+        self.function_mediator.register(self)
+        self.model_mediator.register(self)
+
+        self._add_widgets()
+
+        self.bind(&quot;&lt;Destroy&gt;&quot;, lambda e: self.destructor())
+
+    def set_custom_range(self, min: float, max : float):
+        &#x27;&#x27;&#x27;
+        Cuando el analizador de rangos no logra detectar los rangos de forma
+        automatica, el usuario puede definir un rango personalizado.
+
+        Esto se pasa de forma manual a travez de este metodo y se guarda en una
+        tupla
+        &#x27;&#x27;&#x27;
+        self.custom_range = (min, max)
+
+    def get_custom_range(self) -&gt; tuple[float, float]:
+        &#x27;&#x27;&#x27;
+        Devuelve el rango personalizado definido por el usuario.
+        Tal vez se quite porque no creo que sea necesario.
+        &#x27;&#x27;&#x27;
+        return self.custom_range
+
+    def destructor(self):
+        &#x27;&#x27;&#x27; Destructor&#x27;&#x27;&#x27;
+        self.function_mediator.remove_observer(self)
+        self.model_mediator.remove_model_observer(self)
+
+    # widgets methods
+    def _add_widgets(self):
+        self.minsize(800, 600)
+        center_window(self, 800, 600)
+        self.title_label = ctk.CTkLabel(self, text=&quot;RESULTADOS&quot;, font=ctk.CTkFont(size=SUBTITLE_SIZE, weight=BOLD))
+        self.title_label.pack(pady=10)
+
+        self._add_solution_area()
+        self._add_text_table()
+
+    def _add_solution_area(self):
+        self.results_area = ResultsArea(self, self.function_mediator, model_mediator=self.model_mediator, height=80, width=300)
+        self.results_area.pack(pady=10, padx=10, fill=&quot;x&quot;)
+
+    def _add_text_table(self):
+        self.table = ctk.CTkTextbox(self, width=400, height=200, font=ctk.CTkFont(size=16), wrap=&quot;none&quot;)
+        self.table.pack(pady=10, padx=10, fill=&quot;both&quot;, expand=True)
+
+    def add_procedure_in_table(self, procedure: str):
+        self.table.insert(&quot;0.0&quot;, procedure)
+
+    def append_procedure_in_table(self, procedure: str):
+        self.table.insert(&quot;end&quot;, procedure)
+
+    def clear_table(self):
+        self.table.delete(&quot;0.0&quot;, &quot;end&quot;)
+
+    def solver(self):
+        model_name = self.model_mediator.get_model()
+        self.function_mediator.function.clear_roots()
+
+        print(model_name)
+        if model_name == BISECCION:
+            self.by_bisection()
+        elif model_name == NEWTON_RAPHSON:
+            self.by_newton_raphson()
+        elif model_name == PY_TOOL:
+            self.function_mediator.function.absolute_solver()
+        else:
+            tkinter.messagebox.showerror(&quot;Error&quot;, &quot;Método no implementado&quot;)
+
+        self.results_area.add_solutions()
+        self.results_area._update_widgets()
+
+    def by_bisection(self):
+        function = self.function_mediator.function
+        process = ProcessReference()
+
+        intervals = lo.get_intervals(function)
+
+        if self.custom_range is not None:
+            a, b = self.custom_range
+
+            root = lo.biseccion(function, a, b, 100, procedure=process)
+            if root is not None:
+                function.append_real_root(root)
+
+                self.function_mediator.notify_observers()
+
+                self.clear_table()
+                self.add_procedure_in_table(process.get())
+                return;
+            
+
+        for interval in intervals:
+            a, b = interval
+            root = lo.biseccion(function, a, b, 100, procedure=process)
+
+            function.append_real_root(root)
+            &#x27;&#x27;&#x27;
+            if root is not None:
+                print(f&quot;Root found in interval [{a}, {b}]: {root}&quot;)
+                function.append_real_root(root)
+            else:
+                print(f&quot;No root found in interval [{a}, {b}]&quot;)
+            &#x27;&#x27;&#x27;
+            process.append(f&quot;Root found in interval [{a}, {b}]: {root}\n&quot; if root is not None else f&quot;No root found in interval [{a}, {b}]\n&quot;)
+            process.append(&quot;\n&quot;)
+        self.function_mediator.notify_observers()
+        #self.function_mediator.function.absolute_solver()
+
+        self.clear_table()
+        self.add_procedure_in_table(process.get())
+
+    def by_newton_raphson(self):
+        function = self.function_mediator.function
+        process = ProcessReference()
+
+        intervals = lo.get_intervals(function)
+
+        if self.custom_range is not None:
+            a = self.custom_range[0]
+
+            try:
+                root = newton_raphson_method(function, a, procedure=process)
+                function.append_real_root(root)
+
+                process.append(f&quot;Root found aprox {a}: {root}\n&quot; if root is not None else f&quot;No root found aprox {a}\n&quot;)
+                process.append(&quot;\n&quot;)
+                self.function_mediator.notify_observers()
+
+                self.clear_table()
+                self.add_procedure_in_table(process.get())
+                return
+            except ValueError as e:
+                print(f&quot;No root found aprox {a}: {e}&quot;)
+
+        for interval in intervals:
+            a = interval[0]
+
+            try:
+                root = newton_raphson_method(function, a, procedure=process)
+                function.append_real_root(root)
+            except ValueError as e:
+                print(f&quot;No root found aprox {a}: {e}&quot;)
+
+            process.append(f&quot;Root found aprox {a}: {root}\n&quot; if root is not None else f&quot;No root found aprox {a}\n&quot;)
+            process.append(&quot;\n&quot;)
+
+        self.function_mediator.notify_observers()
+        #self.function_mediator.function.absolute_solver()
+
+        self.clear_table()
+        self.add_procedure_in_table(process.get())
+
+    def by_absolute_solver(self):
+        self.function_mediator.function.absolute_solver()
+        self.function_mediator.notify_observers()
+        self.table.config(font=ctk.CTkFont(size=20, weight=BOLD))
+        self.clear_table()
+        self.add_procedure_in_table(&quot;No es posible ver el procedimiento con el modelo actual\n debido a que no cuenta con subcripcion premium.\n&quot;)
+
+    def show(self):
+        self.grab_set()
+        self.master.wait_window(self)
+
+    # Interface methods
+    def update(self, function: Function):
+        pass
+
+    def update(self, model: Model):
+        pass
+
+    def unregister(self, model: Model):
+        self.model_mediator.unregister(self)
+
+    def register(self, model: Model):
+        self.model_mediator.register(self)</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="file-section" id="count_lines_py">
+        <div class="file-header">📄 count_lines.py</div>
+        <div class="file-path">count_lines.py (112 líneas)</div>
+        <div class="code-block">
+            <div class="code-with-lines">
+                <div class="line-numbers">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112</div>
+                <div class="code-main">import os
+import glob
+from pathlib import Path
+
+def count_lines_in_file(file_path):
+    &quot;&quot;&quot;Cuenta las líneas de código en un archivo Python&quot;&quot;&quot;
+    try:
+        with open(file_path, &#x27;r&#x27;, encoding=&#x27;utf-8&#x27;) as f:
+            lines = f.readlines()
+        
+        total_lines = len(lines)
+        empty_lines = sum(1 for line in lines if line.strip() == &#x27;&#x27;)
+        comment_lines = sum(1 for line in lines if line.strip().startswith(&#x27;#&#x27;))
+        code_lines = total_lines - empty_lines - comment_lines
+        
+        return {
+            &#x27;total&#x27;: total_lines,
+            &#x27;code&#x27;: code_lines,
+            &#x27;empty&#x27;: empty_lines,
+            &#x27;comments&#x27;: comment_lines
+        }
+    except Exception as e:
+        print(f&quot;Error leyendo {file_path}: {e}&quot;)
+        return None
+
+def analyze_python_project(project_root):
+    &quot;&quot;&quot;Analiza todos los archivos Python en el proyecto&quot;&quot;&quot;
+    print(f&quot;Analizando proyecto en: {project_root}&quot;)
+    print(&quot;=&quot; * 80)
+    
+    # Buscar todos los archivos .py
+    python_files = []
+    for root, dirs, files in os.walk(project_root):
+        # Excluir directorios comunes que no son código fuente
+        dirs[:] = [d for d in dirs if d not in [&#x27;__pycache__&#x27;, &#x27;.git&#x27;, &#x27;env&#x27;, &#x27;venv&#x27;, &#x27;.venv&#x27;]]
+        
+        for file in files:
+            if file.endswith(&#x27;.py&#x27;):
+                python_files.append(os.path.join(root, file))
+    
+    if not python_files:
+        print(&quot;No se encontraron archivos Python en el proyecto.&quot;)
+        return
+    
+    total_stats = {
+        &#x27;files&#x27;: 0,
+        &#x27;total&#x27;: 0,
+        &#x27;code&#x27;: 0,
+        &#x27;empty&#x27;: 0,
+        &#x27;comments&#x27;: 0
+    }
+    
+    file_stats = []
+    
+    # Analizar cada archivo
+    for file_path in sorted(python_files):
+        relative_path = os.path.relpath(file_path, project_root)
+        stats = count_lines_in_file(file_path)
+        
+        if stats:
+            file_stats.append((relative_path, stats))
+            total_stats[&#x27;files&#x27;] += 1
+            total_stats[&#x27;total&#x27;] += stats[&#x27;total&#x27;]
+            total_stats[&#x27;code&#x27;] += stats[&#x27;code&#x27;]
+            total_stats[&#x27;empty&#x27;] += stats[&#x27;empty&#x27;]
+            total_stats[&#x27;comments&#x27;] += stats[&#x27;comments&#x27;]
+    
+    # Mostrar resultados por archivo
+    print(f&quot;{&#x27;Archivo&#x27;:&lt;50} {&#x27;Total&#x27;:&lt;8} {&#x27;Código&#x27;:&lt;8} {&#x27;Vacías&#x27;:&lt;8} {&#x27;Comentarios&#x27;:&lt;12}&quot;)
+    print(&quot;-&quot; * 86)
+    
+    for file_path, stats in file_stats:
+        print(f&quot;{file_path:&lt;50} {stats[&#x27;total&#x27;]:&lt;8} {stats[&#x27;code&#x27;]:&lt;8} {stats[&#x27;empty&#x27;]:&lt;8} {stats[&#x27;comments&#x27;]:&lt;12}&quot;)
+    
+    print(&quot;-&quot; * 86)
+    print(f&quot;{&#x27;TOTALES:&#x27;:&lt;50} {total_stats[&#x27;total&#x27;]:&lt;8} {total_stats[&#x27;code&#x27;]:&lt;8} {total_stats[&#x27;empty&#x27;]:&lt;8} {total_stats[&#x27;comments&#x27;]:&lt;12}&quot;)
+    print(f&quot;\nResumen del proyecto:&quot;)
+    print(f&quot;• {total_stats[&#x27;files&#x27;]} archivos Python&quot;)
+    print(f&quot;• {total_stats[&#x27;total&#x27;]} líneas totales&quot;)
+    print(f&quot;• {total_stats[&#x27;code&#x27;]} líneas de código&quot;)
+    print(f&quot;• {total_stats[&#x27;empty&#x27;]} líneas vacías&quot;)
+    print(f&quot;• {total_stats[&#x27;comments&#x27;]} líneas de comentarios&quot;)
+    
+    # Estadísticas por directorio
+    print(&quot;\n&quot; + &quot;=&quot; * 80)
+    print(&quot;ESTADÍSTICAS POR DIRECTORIO:&quot;)
+    print(&quot;=&quot; * 80)
+    
+    dir_stats = {}
+    for file_path, stats in file_stats:
+        dir_name = os.path.dirname(file_path)
+        if dir_name == &#x27;&#x27;:
+            dir_name = &#x27;raíz&#x27;
+        
+        if dir_name not in dir_stats:
+            dir_stats[dir_name] = {&#x27;files&#x27;: 0, &#x27;total&#x27;: 0, &#x27;code&#x27;: 0, &#x27;empty&#x27;: 0, &#x27;comments&#x27;: 0}
+        
+        dir_stats[dir_name][&#x27;files&#x27;] += 1
+        dir_stats[dir_name][&#x27;total&#x27;] += stats[&#x27;total&#x27;]
+        dir_stats[dir_name][&#x27;code&#x27;] += stats[&#x27;code&#x27;]
+        dir_stats[dir_name][&#x27;empty&#x27;] += stats[&#x27;empty&#x27;]
+        dir_stats[dir_name][&#x27;comments&#x27;] += stats[&#x27;comments&#x27;]
+    
+    print(f&quot;{&#x27;Directorio&#x27;:&lt;40} {&#x27;Archivos&#x27;:&lt;8} {&#x27;Total&#x27;:&lt;8} {&#x27;Código&#x27;:&lt;8} {&#x27;Vacías&#x27;:&lt;8} {&#x27;Comentarios&#x27;:&lt;12}&quot;)
+    print(&quot;-&quot; * 94)
+    
+    for dir_name, stats in sorted(dir_stats.items()):
+        print(f&quot;{dir_name:&lt;40} {stats[&#x27;files&#x27;]:&lt;8} {stats[&#x27;total&#x27;]:&lt;8} {stats[&#x27;code&#x27;]:&lt;8} {stats[&#x27;empty&#x27;]:&lt;8} {stats[&#x27;comments&#x27;]:&lt;12}&quot;)
+
+if __name__ == &quot;__main__&quot;:
+    project_root = r&quot;d:\CodeProjects\NumericalMethods&quot;
+    analyze_python_project(project_root)</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="file-section" id="generate_pdf_code_py">
+        <div class="file-header">📄 generate_pdf_code.py</div>
+        <div class="file-path">generate_pdf_code.py (279 líneas)</div>
+        <div class="code-block">
+            <div class="code-with-lines">
+                <div class="line-numbers">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204
+205
+206
+207
+208
+209
+210
+211
+212
+213
+214
+215
+216
+217
+218
+219
+220
+221
+222
+223
+224
+225
+226
+227
+228
+229
+230
+231
+232
+233
+234
+235
+236
+237
+238
+239
+240
+241
+242
+243
+244
+245
+246
+247
+248
+249
+250
+251
+252
+253
+254
+255
+256
+257
+258
+259
+260
+261
+262
+263
+264
+265
+266
+267
+268
+269
+270
+271
+272
+273
+274
+275
+276
+277
+278
+279</div>
+                <div class="code-main">import os
+from datetime import datetime
+import html
+
+def generate_code_document():
+    &quot;&quot;&quot;Genera un documento HTML con todo el código Python del proyecto&quot;&quot;&quot;
+    
+    project_root = r&quot;d:\CodeProjects\NumericalMethods&quot;
+    output_file = os.path.join(project_root, &quot;codigo_completo.html&quot;)
+    
+    # Buscar todos los archivos .py
+    python_files = []
+    for root, dirs, files in os.walk(project_root):
+        # Excluir directorios que no son código fuente
+        dirs[:] = [d for d in dirs if d not in [&#x27;__pycache__&#x27;, &#x27;.git&#x27;, &#x27;env&#x27;, &#x27;venv&#x27;, &#x27;.venv&#x27;]]
+        
+        for file in files:
+            if file.endswith(&#x27;.py&#x27;):
+                python_files.append(os.path.join(root, file))
+    
+    # Crear el contenido HTML
+    html_content = f&quot;&quot;&quot;&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;es&quot;&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+    &lt;title&gt;Código Fuente - Métodos Numéricos&lt;/title&gt;
+    &lt;style&gt;
+        body {{
+            font-family: &#x27;Courier New&#x27;, monospace;
+            margin: 40px;
+            line-height: 1.4;
+            font-size: 11px;
+        }}
+        
+        .header {{
+            text-align: center;
+            margin-bottom: 30px;
+            font-family: Arial, sans-serif;
+        }}
+        
+        .header h1 {{
+            color: #2c3e50;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }}
+        
+        .header .info {{
+            color: #7f8c8d;
+            font-size: 14px;
+        }}
+        
+        .file-section {{
+            margin-bottom: 40px;
+            page-break-inside: avoid;
+        }}
+        
+        .file-header {{
+            background-color: #3498db;
+            color: white;
+            padding: 10px 15px;
+            font-weight: bold;
+            font-size: 14px;
+            margin-bottom: 0;
+            border-radius: 5px 5px 0 0;
+        }}
+        
+        .file-path {{
+            background-color: #ecf0f1;
+            padding: 5px 15px;
+            font-size: 11px;
+            color: #2c3e50;
+            margin: 0;
+            border-bottom: 1px solid #bdc3c7;
+        }}
+        
+        .code-block {{
+            background-color: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-top: none;
+            padding: 0;
+            margin: 0;
+            font-family: &#x27;Courier New&#x27;, monospace;
+            font-size: 10px;
+            border-radius: 0 0 5px 5px;
+        }}
+        
+        .code-content {{
+            padding: 15px;
+            white-space: pre-wrap;
+            overflow-x: auto;
+        }}
+        
+        .line-numbers {{
+            background-color: #f1f3f4;
+            color: #70757a;
+            padding: 15px 10px;
+            border-right: 1px solid #e9ecef;
+            float: left;
+            font-size: 9px;
+            line-height: 1.4;
+            user-select: none;
+        }}
+        
+        .code-with-lines {{
+            overflow: hidden;
+        }}
+        
+        .code-main {{
+            margin-left: 60px;
+            padding: 15px;
+        }}
+        
+        .toc {{
+            background-color: #f8f9fa;
+            border: 1px solid #e9ecef;
+            padding: 20px;
+            margin-bottom: 30px;
+            border-radius: 5px;
+        }}
+        
+        .toc h2 {{
+            margin-top: 0;
+            color: #2c3e50;
+            font-family: Arial, sans-serif;
+        }}
+        
+        .toc ul {{
+            list-style-type: none;
+            padding-left: 0;
+        }}
+        
+        .toc li {{
+            padding: 5px 0;
+            border-bottom: 1px dotted #bdc3c7;
+        }}
+        
+        .toc a {{
+            text-decoration: none;
+            color: #3498db;
+        }}
+        
+        .toc a:hover {{
+            text-decoration: underline;
+        }}
+        
+        .stats {{
+            background-color: #e8f5e8;
+            border-left: 4px solid #27ae60;
+            padding: 15px;
+            margin-bottom: 20px;
+        }}
+        
+        @media print {{
+            body {{ margin: 20px; }}
+            .file-section {{ page-break-after: auto; }}
+            .code-block {{ page-break-inside: avoid; }}
+        }}
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;div class=&quot;header&quot;&gt;
+        &lt;h1&gt;Proyecto Métodos Numéricos&lt;/h1&gt;
+        &lt;div class=&quot;info&quot;&gt;
+            Código fuente completo&lt;br&gt;
+            Generado el: {datetime.now().strftime(&#x27;%d/%m/%Y a las %H:%M&#x27;)}&lt;br&gt;
+            Total de archivos: {len(python_files)}
+        &lt;/div&gt;
+    &lt;/div&gt;
+&quot;&quot;&quot;
+
+    # Generar estadísticas
+    total_lines = 0
+    total_code_lines = 0
+    
+    # Tabla de contenidos
+    html_content += &quot;&quot;&quot;
+    &lt;div class=&quot;toc&quot;&gt;
+        &lt;h2&gt;📋 Índice de Archivos&lt;/h2&gt;
+        &lt;ul&gt;
+&quot;&quot;&quot;
+    
+    for file_path in sorted(python_files):
+        relative_path = os.path.relpath(file_path, project_root)
+        file_id = relative_path.replace(&#x27;\\&#x27;, &#x27;_&#x27;).replace(&#x27;/&#x27;, &#x27;_&#x27;).replace(&#x27;.&#x27;, &#x27;_&#x27;)
+        html_content += f&#x27;            &lt;li&gt;&lt;a href=&quot;#{file_id}&quot;&gt;{relative_path}&lt;/a&gt;&lt;/li&gt;\n&#x27;
+        
+        # Contar líneas para estadísticas
+        try:
+            with open(file_path, &#x27;r&#x27;, encoding=&#x27;utf-8&#x27;) as f:
+                lines = f.readlines()
+                total_lines += len(lines)
+                code_lines = sum(1 for line in lines if line.strip() and not line.strip().startswith(&#x27;#&#x27;))
+                total_code_lines += code_lines
+        except:
+            pass
+    
+    html_content += &quot;&quot;&quot;        &lt;/ul&gt;
+    &lt;/div&gt;
+&quot;&quot;&quot;
+    
+    # Estadísticas
+    html_content += f&quot;&quot;&quot;
+    &lt;div class=&quot;stats&quot;&gt;
+        &lt;strong&gt;📊 Estadísticas del Proyecto:&lt;/strong&gt;&lt;br&gt;
+        • {len(python_files)} archivos Python&lt;br&gt;
+        • {total_lines} líneas totales&lt;br&gt;
+        • {total_code_lines} líneas de código&lt;br&gt;
+        • Aproximadamente {total_lines // 50} páginas (estimado)
+    &lt;/div&gt;
+&quot;&quot;&quot;
+    
+    # Procesar cada archivo
+    for file_path in sorted(python_files):
+        relative_path = os.path.relpath(file_path, project_root)
+        file_id = relative_path.replace(&#x27;\\&#x27;, &#x27;_&#x27;).replace(&#x27;/&#x27;, &#x27;_&#x27;).replace(&#x27;.&#x27;, &#x27;_&#x27;)
+        
+        try:
+            with open(file_path, &#x27;r&#x27;, encoding=&#x27;utf-8&#x27;) as f:
+                content = f.read()
+            
+            # Escapar HTML
+            content_escaped = html.escape(content)
+            
+            # Generar números de línea
+            lines = content.split(&#x27;\n&#x27;)
+            line_numbers = &#x27;\n&#x27;.join(str(i+1) for i in range(len(lines)))
+            
+            html_content += f&quot;&quot;&quot;
+    &lt;div class=&quot;file-section&quot; id=&quot;{file_id}&quot;&gt;
+        &lt;div class=&quot;file-header&quot;&gt;📄 {os.path.basename(file_path)}&lt;/div&gt;
+        &lt;div class=&quot;file-path&quot;&gt;{relative_path} ({len(lines)} líneas)&lt;/div&gt;
+        &lt;div class=&quot;code-block&quot;&gt;
+            &lt;div class=&quot;code-with-lines&quot;&gt;
+                &lt;div class=&quot;line-numbers&quot;&gt;{line_numbers}&lt;/div&gt;
+                &lt;div class=&quot;code-main&quot;&gt;{content_escaped}&lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+&quot;&quot;&quot;
+            
+        except Exception as e:
+            html_content += f&quot;&quot;&quot;
+    &lt;div class=&quot;file-section&quot; id=&quot;{file_id}&quot;&gt;
+        &lt;div class=&quot;file-header&quot;&gt;❌ {os.path.basename(file_path)}&lt;/div&gt;
+        &lt;div class=&quot;file-path&quot;&gt;{relative_path}&lt;/div&gt;
+        &lt;div class=&quot;code-block&quot;&gt;
+            &lt;div class=&quot;code-content&quot;&gt;Error al leer el archivo: {str(e)}&lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+&quot;&quot;&quot;
+    
+    html_content += &quot;&quot;&quot;
+&lt;/body&gt;
+&lt;/html&gt;
+&quot;&quot;&quot;
+    
+    # Guardar el archivo HTML
+    with open(output_file, &#x27;w&#x27;, encoding=&#x27;utf-8&#x27;) as f:
+        f.write(html_content)
+    
+    print(f&quot;✅ Documento generado exitosamente!&quot;)
+    print(f&quot;📄 Archivo: {output_file}&quot;)
+    print(f&quot;📊 {len(python_files)} archivos procesados&quot;)
+    print(f&quot;📏 {total_lines} líneas totales&quot;)
+    print(f&quot;\n🔥 Pasos para convertir a PDF:&quot;)
+    print(&quot;1. Abre el archivo codigo_completo.html en tu navegador&quot;)
+    print(&quot;2. Presiona Ctrl+P para imprimir&quot;)
+    print(&quot;3. Selecciona &#x27;Guardar como PDF&#x27; como destino&quot;)
+    print(&quot;4. En opciones de impresión:&quot;)
+    print(&quot;   - Márgenes: Mínimos&quot;)
+    print(&quot;   - Escala: 85-90% (para que quepa mejor)&quot;)
+    print(&quot;   - Incluir gráficos de fondo: ✓&quot;)
+    print(&quot;5. ¡Listo! Tendrás tu PDF con todo el código&quot;)
+    
+    return output_file
+
+if __name__ == &quot;__main__&quot;:
+    generate_code_document()</div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
